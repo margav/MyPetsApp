@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp">
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
+
+
+    <!--Text stable-->
+    <LinearLayout
+        android:id="@+id/layout_information_text_stable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toLeftOf="@+id/layout_information_text_changing"
+        android:layout_toStartOf="@id/layout_information_text_changing"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="end"
+        tools:ignore="RelativeOverlap">
+
+        <TextView
+            android:id="@+id/text_for_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pet's name: "
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/text_for_animal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/animal"
+            />
+
+        <TextView
+            android:id="@+id/text_for_breed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Breed: "
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/text_for_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sex: "
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/text_for_colour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Colour: "
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/text_for_date_of_birth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date of birth: "
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/text_for_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Owner: "
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+
+
+    <!--Text that changes -->
+
+    <LinearLayout
+        android:id="@+id/layout_information_text_changing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="end">
+
+        <TextView
+            android:id="@+id/pet_name_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="15"
+            />
+
+        <TextView
+            android:id="@+id/pet_animal_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="15"
+            />
+
+        <TextView
+            android:id="@+id/pet_breed_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="15"
+            />
+
+        <TextView
+            android:id="@+id/pet_sex_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="15"
+            />
+
+        <TextView
+            android:id="@+id/pet_colour_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="15"
+            />
+
+        <TextView
+            android:id="@+id/pet_date_of_birth_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="15"
+            />
+
+        <TextView
+            android:id="@+id/pet_name_owner_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="15"
+            />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edit_text_pet_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_text"
+        android:layout_below="@id/layout_information_text_changing"
+        android:layout_marginTop="20dp"
+        />
+
+    <ImageButton
+        android:id="@+id/arrow_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_left"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        tools:ignore="ContentDescription" />
+
+
+    <ImageButton
+        android:id="@+id/arrow_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_right"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        tools:ignore="ContentDescription" />
+
+
+</RelativeLayout>

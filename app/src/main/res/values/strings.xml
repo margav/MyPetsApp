@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">MyPet</string>
+    <string name="title_activity_browse">MyPet</string>
+    <string name="title_activity_browse2">MyPet</string>
+    <string name="title_activity_browse3">MyPet</string>
+
+    <!--Names-->
+    <string name="jack">Jack</string>
+    <string name="mailo">Mailo</string>
+
+
+    <string name="bizou">Bizou</string>
+
+    <string name="jill">Jill</string>
+
+
+    <!--Animals-->
+    <string name="cat">Cat</string>
+    <string name="dog">Dog</string>
+    <string name="lizard">Lizard</string>
+
+    <!--Breed-->
+    <string name="corgie">Corgie</string>
+    <string name="siamese">Siamese</string>
+    <string name="sheepferd">Sheepferd</string>
+    <string name="iguana">Iguana</string>
+
+    <!--Sex-->
+    <string name="male">M</string>
+    <string name="female">F</string>
+
+    <!--Colour-->
+    <string name="green">Green</string>
+    <string name="grey">Grey</string>
+    <string name="black">Black</string>
+    <string name="brown">Brown</string>
+
+
+    <!--Date-->
+    <string name="date_jack">1/6/2013</string>
+    <string name="date_mailo">15/3/2015</string>
+
+
+    <string name="date_bizou">2/3/2009</string>
+
+    <string name="date_jill">4/3/2016</string>
+
+
+
+    <!--Owner-->
+    <string name="owner1">John Appleseed</string>
+    <string name="owner2">Harvey Specter</string>
+
+    <string name="owner3">Nikola Tesla</string>
+    <string name="owner4">Mike Ross</string>
+
+
+
+    <!--Views-->
+    <string name="button_for_dogs">Dogs</string>
+    <string name="button_for_cats">Cats</string>
+    <string name="button_for_other">Other</string>
+    <string name="hint_text">Write more information here ...</string>
+    <string name="breed">Breed:</string>
+    <string name="colour">Colour:</string>
+    <string name="date_of_birth">Date of birth:</string>
+    <string name="owner">Owner:</string>
+    <string name="pet_s_name">Pet\'s name:</string>
+    <string name="sex">Sex:</string>
+    <string name="choose_category">Choose category</string>
+    <string name="animal">Animal:</string>
+
+
+</resources>
