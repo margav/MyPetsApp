@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-
 public class BrowseActivity extends AppCompatActivity {
 
     private ImageView mImageView;
@@ -22,18 +21,19 @@ public class BrowseActivity extends AppCompatActivity {
     private TextView mPetOwnerView;
 
     private int currentIndex = 0;
-    private static final String KEY_INDEX = "theCurrentIndex";
-    static final String EXTRA_KEY_FOR_LIST = "keyForList";
+    private static final String KEY_INDEX = "";
+    static final String EXTRA_KEY_FOR_LIST = "";
 
-    private List<PetInfo> dogs = PetInfoFactory.getListOfDogs();
-    private List<PetInfo> cats = PetInfoFactory.getListOfCats();
-    private List<PetInfo> other = PetInfoFactory.getListOfOther();
-
+    private List<PetInfo> petInfos = ListActivity.petInfos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
+
+        if (savedInstanceState == null) {
+            currentIndex = getIntent().getIntExtra(EXTRA_KEY_FOR_LIST, 0);
+        }
 
         if (savedInstanceState != null) {
             currentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
@@ -48,16 +48,13 @@ public class BrowseActivity extends AppCompatActivity {
         mPetDateOfBirthView = (TextView) findViewById(R.id.pet_date_of_birth_view);
         mPetOwnerView = (TextView) findViewById(R.id.pet_name_owner_view);
 
-        if (getIntent().getStringExtra(EXTRA_KEY_FOR_LIST).equals("dogs")) {
-        displayViewsDogs();
-
         ImageButton mArrowLeft = (ImageButton) findViewById(R.id.arrow_left);
         mArrowLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 currentIndex = currentIndex - 1;
-                if (currentIndex < 0) { currentIndex = dogs.size() - 1;}
-                displayViewsDogs();
+                if (currentIndex < 0) { currentIndex = petInfos.size() - 1;}
+                displayViews();
 
             }
         });
@@ -66,99 +63,26 @@ public class BrowseActivity extends AppCompatActivity {
         mArrowRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentIndex = (currentIndex + 1) % dogs.size();
-                displayViewsDogs();
+                currentIndex = (currentIndex + 1) % petInfos.size();
+                displayViews();
             }
         });
-        }
 
-        if (getIntent().getStringExtra(EXTRA_KEY_FOR_LIST).equals("cats")) {
-            displayViewsCats();
-
-            ImageButton mArrowLeft = (ImageButton) findViewById(R.id.arrow_left);
-            mArrowLeft.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    currentIndex = currentIndex - 1;
-                    if (currentIndex < 0) { currentIndex = cats.size() - 1;}
-                    displayViewsCats();
-
-                }
-            });
-
-            ImageButton mArrowRight =  (ImageButton) findViewById(R.id.arrow_right);
-            mArrowRight.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    currentIndex = (currentIndex + 1) % cats.size();
-                    displayViewsCats();
-                }
-            });
-        }
-
-        if (getIntent().getStringExtra(EXTRA_KEY_FOR_LIST).equals("other")) {
-            displayViewsOther();
-
-            ImageButton mArrowLeft = (ImageButton) findViewById(R.id.arrow_left);
-            mArrowLeft.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    currentIndex = currentIndex - 1;
-                    if (currentIndex < 0) { currentIndex = other.size() - 1;}
-                    displayViewsOther();
-
-                }
-            });
-
-            ImageButton mArrowRight =  (ImageButton) findViewById(R.id.arrow_right);
-            mArrowRight.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    currentIndex = (currentIndex + 1) % other.size();
-                    displayViewsOther();
-                }
-            });
-        }
+        displayViews();
 
     }
 
-    private void displayViewsDogs() {
+    private void displayViews() {
 
-        mImageView.setImageResource(dogs.get(currentIndex).getImageId());
+        mImageView.setImageResource(petInfos.get(currentIndex).getImageId());
 
-        mPetNameView.setText(dogs.get(currentIndex).getPetNameId());
-        mPetAnimalView.setText(dogs.get(currentIndex).getPetAnimalId());
-        mPetBreedView.setText(dogs.get(currentIndex).getPetBreedId());
-        mPetSexView.setText(dogs.get(currentIndex).getPetSexId());
-        mPetColourView.setText(dogs.get(currentIndex).getPetColourId());
-        mPetDateOfBirthView.setText(dogs.get(currentIndex).getPetDateOfBirthId());
-        mPetOwnerView.setText(dogs.get(currentIndex).getPetOwnerId());
-    }
-
-    private void displayViewsCats() {
-
-        mImageView.setImageResource(cats.get(currentIndex).getImageId());
-
-        mPetNameView.setText(cats.get(currentIndex).getPetNameId());
-        mPetAnimalView.setText(cats.get(currentIndex).getPetAnimalId());
-        mPetBreedView.setText(cats.get(currentIndex).getPetBreedId());
-        mPetSexView.setText(cats.get(currentIndex).getPetSexId());
-        mPetColourView.setText(cats.get(currentIndex).getPetColourId());
-        mPetDateOfBirthView.setText(cats.get(currentIndex).getPetDateOfBirthId());
-        mPetOwnerView.setText(cats.get(currentIndex).getPetOwnerId());
-    }
-
-    private void displayViewsOther() {
-
-        mImageView.setImageResource(other.get(currentIndex).getImageId());
-
-        mPetNameView.setText(other.get(currentIndex).getPetNameId());
-        mPetAnimalView.setText(other.get(currentIndex).getPetAnimalId());
-        mPetBreedView.setText(other.get(currentIndex).getPetBreedId());
-        mPetSexView.setText(other.get(currentIndex).getPetSexId());
-        mPetColourView.setText(other.get(currentIndex).getPetColourId());
-        mPetDateOfBirthView.setText(other.get(currentIndex).getPetDateOfBirthId());
-        mPetOwnerView.setText(other.get(currentIndex).getPetOwnerId());
+        mPetNameView.setText(petInfos.get(currentIndex).getPetNameId());
+        mPetAnimalView.setText(petInfos.get(currentIndex).getPetAnimalId());
+        mPetBreedView.setText(petInfos.get(currentIndex).getPetBreedId());
+        mPetSexView.setText(petInfos.get(currentIndex).getPetSexId());
+        mPetColourView.setText(petInfos.get(currentIndex).getPetColourId());
+        mPetDateOfBirthView.setText(petInfos.get(currentIndex).getPetDateOfBirthId());
+        mPetOwnerView.setText(petInfos.get(currentIndex).getPetOwnerId());
     }
 
     @Override

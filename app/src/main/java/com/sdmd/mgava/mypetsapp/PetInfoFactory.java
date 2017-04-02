@@ -7,7 +7,7 @@ class PetInfoFactory {
 
     private static List<PetInfo> listOfDogs = new ArrayList<>() ;
     private static List<PetInfo> listOfCats = new ArrayList<>() ;
-    private static List<PetInfo> listOfOther = new ArrayList<>() ;
+    private static List<PetInfo> listOfLizards = new ArrayList<>() ;
 
     private PetInfoFactory() {
 
@@ -23,9 +23,9 @@ class PetInfoFactory {
         listOfCats.add(petInfo);
     }
 
-    private static void addOther (int PetName,int PetAnimal, int PetBreed, int PetSex, int PetColour, int PetDateOfBirth, int PetOwner, int image) {
+    private static void addLizards (int PetName,int PetAnimal, int PetBreed, int PetSex, int PetColour, int PetDateOfBirth, int PetOwner, int image) {
         PetInfo petInfo = new PetInfo(PetName,PetAnimal, PetBreed, PetSex,PetColour, PetDateOfBirth, PetOwner, image);
-        listOfOther.add(petInfo);
+        listOfLizards.add(petInfo);
     }
 
     private static void initializeDogs () {
@@ -37,8 +37,8 @@ class PetInfoFactory {
         addCat(R.string.bizou,  R.string.cat, R.string.siamese ,R.string.male,R.string.grey, R.string.date_bizou,R.string.owner3, R.drawable.cat);
     }
 
-    private static void initializeOther () {
-        addOther(R.string.jill, R.string.lizard,R.string.iguana ,R.string.female,R.string.green, R.string.date_jill,R.string.owner4, R.drawable.lizard);
+    private static void initializeLizards () {
+        addLizards(R.string.jill, R.string.lizard,R.string.iguana ,R.string.female,R.string.green, R.string.date_jill,R.string.owner4, R.drawable.lizard);
     }
 
     static List<PetInfo> getListOfDogs() {
@@ -51,9 +51,19 @@ class PetInfoFactory {
         return listOfCats;
     }
 
-    static List<PetInfo> getListOfOther() {
-        initializeOther();
-        return listOfOther;
+    static List<PetInfo> getListOfLizards() {
+        initializeLizards();
+        return listOfLizards;
+    }
+    static List<String> getPetCategories() {
+        ArrayList<String> petInfos = new ArrayList<>();
+
+        petInfos.add("Dogs");
+        petInfos.add("Cats");
+        petInfos.add("Lizards");
+
+
+        return petInfos;
     }
 
 }

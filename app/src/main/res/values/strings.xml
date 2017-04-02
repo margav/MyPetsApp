@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">MyPet</string>
-    <string name="title_activity_browse">MyPet</string>
-    <string name="title_activity_browse2">MyPet</string>
-    <string name="title_activity_browse3">MyPet</string>
+    <string name="app_name">MyPetApp</string>
+    <string name="title_activity_browse">MyPetApp</string>
+    <string name="title_activity_browse2">MyPetApp</string>
+    <string name="title_activity_browse3">MyPetApp</string>
 
     <!--Names-->
     <string name="jack">Jack</string>
@@ -69,6 +69,11 @@
     <string name="sex">Sex:</string>
     <string name="choose_category">Choose category</string>
     <string name="animal">Animal:</string>
+
+
+    <string name="list">List View</string>
+    <string name="grid">Grid View</string>
+    <string name="title_activity_adapter_layout">Pets</string>
 
 
 </resources>

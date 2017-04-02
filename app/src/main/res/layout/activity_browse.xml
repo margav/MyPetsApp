@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="20dp">
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
 
     <ImageView
         android:id="@+id/image_view"
@@ -14,8 +14,7 @@
         android:layout_alignParentLeft="true"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:contentDescription=""
-        tools:ignore="ContentDescription" />
+        />
 
 
     <!--Text stable-->
@@ -34,7 +33,7 @@
             android:id="@+id/text_for_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/pet_s_name"
+            android:text="Pet's name: "
             />
 
         <TextView
@@ -42,41 +41,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Animal: "
-            tools:ignore="HardcodedText" />
+            />
 
         <TextView
             android:id="@+id/text_for_breed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/breed"
+            android:text="Breed: "
             />
 
         <TextView
             android:id="@+id/text_for_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sex"
+            android:text="Sex: "
             />
 
         <TextView
             android:id="@+id/text_for_colour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/colour"
+            android:text="Colour: "
             />
 
         <TextView
             android:id="@+id/text_for_date_of_birth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/date_of_birth"
+            android:text="Date of birth: "
             />
 
         <TextView
             android:id="@+id/text_for_owner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/owner"
+            android:text="Owner: "
             />
 
     </LinearLayout>
@@ -91,7 +90,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:maxLength="15"
-        tools:ignore="RelativeOverlap" />
+        />
 
     <TextView
         android:id="@+id/pet_animal_view"
@@ -174,8 +173,7 @@
         android:src="@drawable/arrow_left"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        tools:ignore="ContentDescription" />
+        android:layout_alignParentBottom="true"/>
 
 
     <ImageButton
@@ -186,10 +184,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        tools:ignore="ContentDescription" />
+        android:layout_alignParentBottom="true"/>
+
 
 </RelativeLayout>
-
-
-

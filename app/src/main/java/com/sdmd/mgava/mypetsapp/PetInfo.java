@@ -12,7 +12,7 @@ package com.sdmd.mgava.mypetsapp;
      private int PetOwnerId;
      private int imageId;
 
-     PetInfo(int PetName, int PetAnimal, int PetBreed, int PetSex, int PetColour, int PetDateOfBirth, int PetOwner, int theImage) {
+     PetInfo (int PetName, int PetAnimal, int PetBreed, int PetSex, int PetColour, int PetDateOfBirth, int PetOwner, int theImage) {
          PetNameId = PetName;
          PetAnimalId = PetAnimal;
          PetBreedId = PetBreed;
@@ -87,6 +87,5 @@ package com.sdmd.mgava.mypetsapp;
      public void setPetAnimalId(int petAnimalId) {
          PetAnimalId = petAnimalId;
      }
-
 
  }
