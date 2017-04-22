@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, petCategories);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, petCategories);
         showListView();
     }
 
