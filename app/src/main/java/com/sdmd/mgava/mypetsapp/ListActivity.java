@@ -36,7 +36,7 @@ public class ListActivity extends AppCompatActivity {
         if (getIntent().getStringExtra(EXTRA_KEY).equalsIgnoreCase("cats")) {
             petInfos = PetInfoFactory.getListOfCats();
         }
-        if (getIntent().getStringExtra(EXTRA_KEY).equalsIgnoreCase("hamsters")) {
+        if (getIntent().getStringExtra(EXTRA_KEY).equalsIgnoreCase("lizards")) {
             petInfos = PetInfoFactory.getListOfLizards();
         }
 
