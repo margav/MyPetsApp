@@ -1,93 +1,79 @@
 package com.sdmd.mgava.mypetsapp;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.List;
 
 public class BrowseActivity extends AppCompatActivity {
 
-    private ImageView mImageView;
-    private TextView mPetNameView;
-    private TextView mPetAnimalView;
-    private TextView mPetBreedView;
-    private TextView mPetSexView;
-    private TextView mPetColourView;
-    private TextView mPetDateOfBirthView;
-    private TextView mPetOwnerView;
+    private PetDBSchemaHelper helper;
 
-    private int currentIndex = 0;
-    private static final String KEY_INDEX = "";
-    static final String EXTRA_KEY_FOR_LIST = "";
-
-    private List<PetInfo> petInfos = ListActivity.petInfos;
+    private static final String[] PROJECTIONS = {PetDBSchema.PetTable.NAME,PetDBSchema.PetTable.DATE_OF_BIRTH,    PetDBSchema.PetTable.GENDER,
+            PetDBSchema.PetTable.BREED,
+            PetDBSchema.PetTable.COLOUR,
+            PetDBSchema.PetTable.DISTINGUISHING_MARKS,
+            PetDBSchema.PetTable.CHIP_ID,
+            PetDBSchema.PetTable.OWNER_NAME,
+            PetDBSchema.PetTable.OWNER_ADDRESS,
+            PetDBSchema.PetTable.OWNER_PHONE,
+            PetDBSchema.PetTable.VET_NAME,
+            PetDBSchema.PetTable.VET_ADDRESS,
+            PetDBSchema.PetTable.VET_PHONE,
+            PetDBSchema.PetTable.COMMENTS ,
+            PetDBSchema.PetTable.IMAGE_URI};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browse);
+        setContentView(R.layout.activity_browse_2);
 
-        if (savedInstanceState == null) {
-            currentIndex = getIntent().getIntExtra(EXTRA_KEY_FOR_LIST, 0);
+        helper = new PetDBSchemaHelper(this);
+
+        getDesiredPets();
+    }
+
+    private void getDesiredPets() {
+        SQLiteDatabase database = helper.getReadableDatabase();
+
+        Cursor cursor = database.query(PetDBSchema.PetTable.TABLE_NAME, PROJECTIONS, null, null, null, null, null);
+        String results = "";
+
+        while (cursor.moveToNext()) {
+
+            String NAME = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.NAME));
+            String DATE_OF_BIRTH = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.DATE_OF_BIRTH));
+            String GENDER = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.GENDER));
+            String BREED = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.BREED));
+            String COLOUR = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.COLOUR));
+            String DISTINGUISHING_MARKS = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.DISTINGUISHING_MARKS));
+            int CHIP_ID = cursor.getInt(cursor.getColumnIndex(PetDBSchema.PetTable.CHIP_ID));
+            String OWNER_NAME = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.OWNER_NAME));
+            String OWNER_ADDRESS = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.OWNER_ADDRESS));
+            String OWNER_PHONE = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.OWNER_PHONE));
+            String VET_NAME = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.VET_NAME));
+            String VET_ADDRESS = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.VET_ADDRESS));
+            String VET_PHONE = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.VET_PHONE));
+            String COMMENTS = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.COMMENTS));
+            int IMAGE_URI = cursor.getInt(cursor.getColumnIndex(PetDBSchema.PetTable.IMAGE_URI));
+
+
+            results += IMAGE_URI + "\t" + NAME + "\t" + BREED + "\t" + DATE_OF_BIRTH + "\t" + GENDER + "\t" + COLOUR + "\t" + DISTINGUISHING_MARKS + "\t" + CHIP_ID + "\t" + OWNER_NAME + "\t" + OWNER_ADDRESS + "\t"
+                    + OWNER_PHONE + "\t" + VET_NAME + "\t" + VET_ADDRESS + "\t" + VET_PHONE + "\t" + COMMENTS + "\n\n";
         }
 
-        if (savedInstanceState != null) {
-            currentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-        }
+        TextView resultsTextView = (TextView) findViewById(R.id.view_for_database_results2);
+        resultsTextView.setText(results);
 
-        mImageView = (ImageView) findViewById(R.id.image_view);
-        mPetNameView = (TextView) findViewById(R.id.pet_name_view);
-        mPetAnimalView = (TextView) findViewById(R.id.pet_animal_view);
-        mPetBreedView = (TextView) findViewById(R.id.pet_breed_view);
-        mPetSexView = (TextView) findViewById(R.id.pet_sex_view);
-        mPetColourView = (TextView) findViewById(R.id.pet_colour_view);
-        mPetDateOfBirthView = (TextView) findViewById(R.id.pet_date_of_birth_view);
-        mPetOwnerView = (TextView) findViewById(R.id.pet_name_owner_view);
-
-        ImageButton mArrowLeft = (ImageButton) findViewById(R.id.arrow_left);
-        mArrowLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentIndex = currentIndex - 1;
-                if (currentIndex < 0) { currentIndex = petInfos.size() - 1;}
-                displayViews();
-
-            }
-        });
-
-        ImageButton mArrowRight =  (ImageButton) findViewById(R.id.arrow_right);
-        mArrowRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentIndex = (currentIndex + 1) % petInfos.size();
-                displayViews();
-            }
-        });
-
-        displayViews();
+        cursor.close();
 
     }
 
-    private void displayViews() {
-
-        mImageView.setImageResource(petInfos.get(currentIndex).getImageId());
-
-        mPetNameView.setText(petInfos.get(currentIndex).getPetNameId());
-        mPetAnimalView.setText(petInfos.get(currentIndex).getPetAnimalId());
-        mPetBreedView.setText(petInfos.get(currentIndex).getPetBreedId());
-        mPetSexView.setText(petInfos.get(currentIndex).getPetSexId());
-        mPetColourView.setText(petInfos.get(currentIndex).getPetColourId());
-        mPetDateOfBirthView.setText(petInfos.get(currentIndex).getPetDateOfBirthId());
-        mPetOwnerView.setText(petInfos.get(currentIndex).getPetOwnerId());
-    }
-
+    //onDestroy
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(KEY_INDEX, currentIndex);
+    protected void onDestroy() {
+        helper.close();
+        super.onDestroy();
     }
 }
