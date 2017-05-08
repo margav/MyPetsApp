@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private DBSchemaHelper helper;
     private SQLiteDatabase database;
 
-    private List<String> petCategories = PetFactory.getPetCategories();
-    private List<Pet> listOfPets = PetFactory.getListOfPets();
+    private List<String> petCategories = PetInfoFactory.getPetCategories();
+    private List<PetInfo> listOfPetInfos = PetInfoFactory.getListOfPetInfos();
 
     private BaseAdapter adapter;
 
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, com.sdmd.mgava.mypetsapp.ListActivity.class);
                 String category = (String) adapter.getItem(position);
 
-                for (Pet p: listOfPets) {
+                for (PetInfo p: listOfPetInfos) {
                     if (p.getAnimals().equals(category)) { insertPet(p); }
                 }
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, com.sdmd.mgava.mypetsapp.ListActivity.class);
                 String category = (String) adapter.getItem(position);
 
-                for (Pet p: listOfPets) {
+                for (PetInfo p: listOfPetInfos) {
                     if (p.getAnimals().equals(category)) { insertPet(p); }
                 }
                 startActivity(intent);
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //code for adding to database
-    private ContentValues getContentValues(Pet p) {
+    private ContentValues getContentValues(PetInfo p) {
         ContentValues values = new ContentValues();
 
         values.put(DBSchema.PetTable.NAME, p.getPetName());
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         return values;
     }
 
-    private void insertPet(Pet p) {
+    private void insertPet(PetInfo p) {
         database = helper.getWritableDatabase();
         ContentValues values = getContentValues(p);
         database.insert(DBSchema.PetTable.TABLE_NAME, null, values);

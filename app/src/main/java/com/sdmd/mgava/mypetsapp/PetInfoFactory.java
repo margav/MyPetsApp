@@ -3,17 +3,17 @@ package com.sdmd.mgava.mypetsapp;
 import java.util.ArrayList;
 import java.util.List;
 
-class PetFactory {
+class PetInfoFactory {
 
-    private static List<com.sdmd.mgava.mypetsapp.Pet> listOfPets = new ArrayList<>();
+    private static List<PetInfo> listOfPetInfos = new ArrayList<>();
 
-    private PetFactory () { }
+    private PetInfoFactory() { }
 
     private static void addPet (String PetName, String dateOfBirth, String sex, String breed, String colour, String distinguishingMarks, int chipId, String ownerName, String ownerAddress,
                                 String ownerPhone, String VetName, String VetAddress, String VetPhone, String comments, int imageUri, String animals) {
-        com.sdmd.mgava.mypetsapp.Pet pet = new com.sdmd.mgava.mypetsapp.Pet( PetName,  dateOfBirth,  sex,  breed,  colour,  distinguishingMarks,  chipId,  ownerName,  ownerAddress,
+        PetInfo petInfo = new PetInfo( PetName,  dateOfBirth,  sex,  breed,  colour,  distinguishingMarks,  chipId,  ownerName,  ownerAddress,
                  ownerPhone,  VetName,  VetAddress,  VetPhone,  comments,  imageUri , animals);
-        listOfPets.add(pet);    }
+        listOfPetInfos.add(petInfo);    }
 
 
     private static void initializePets () {
@@ -25,9 +25,9 @@ class PetFactory {
 
  }
 
-    static List<com.sdmd.mgava.mypetsapp.Pet> getListOfPets() {
+    static List<PetInfo> getListOfPetInfos() {
         initializePets();
-        return listOfPets;
+        return listOfPetInfos;
     }
 
     static List<String> getPetCategories() {

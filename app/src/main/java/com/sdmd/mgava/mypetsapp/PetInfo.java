@@ -1,6 +1,6 @@
 package com.sdmd.mgava.mypetsapp;
 
-class Pet {
+class PetInfo {
 
     private String PetName;
     private String dateOfBirth;
@@ -84,8 +84,8 @@ class Pet {
         return animals;
     }
 
-    Pet (String PetName, String dateOfBirth, String sex, String breed, String colour, String distinguishingMarks, int chipId, String ownerName, String ownerAddress, String ownerPhone, String VetName,
-         String VetAddress, String VetPhone, String comments, int imageUri, String animals)
+    PetInfo(String PetName, String dateOfBirth, String sex, String breed, String colour, String distinguishingMarks, int chipId, String ownerName, String ownerAddress, String ownerPhone, String VetName,
+            String VetAddress, String VetPhone, String comments, int imageUri, String animals)
      {
          this.PetName = PetName;
          this.dateOfBirth = dateOfBirth;
