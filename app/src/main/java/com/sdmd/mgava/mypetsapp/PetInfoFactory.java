@@ -17,11 +17,11 @@ class PetInfoFactory {
 
 
     private static void initializePets () {
-        addPet("Jack", "12/4/2015", "F", "Shepferd", "Black", "Broken leg", 1, "Harvey Specter", "33 Maine", "100876554", "Rita Rose", "Park ave 42", "190999878", "It's a nice dog.", R.drawable.dog1, "dogs");
+        addPet("Jack", "12/4/2015", "F", "Shepferd", "Black", "Broken leg", 1, "Harvey Specter", "33 Maine", "100876554", "Rita Rose", "Park ave 42", "190999878", "", R.drawable.dog1, "dogs");
 
-        addPet("Bizou", "15/3/2014", "M", "Siam", "Brown", "Missing tooth", 11, "Mike Ross", "5 ave", "123456778", "Josh Macalley", "3 ave ", "1898799897", "It's a very good cat.", R.drawable.cat, "cats");
+        addPet("Bizou", "15/3/2014", "M", "Siam", "Brown", "Missing tooth", 11, "Mike Ross", "5 ave", "123456778", "Josh Macalley", "3 ave ", "1898799897", "", R.drawable.cat, "cats");
 
-        addPet("Saimon", "15/3/2014", "M", "Inguana", "Green", "", 21, "John Appleseed", "Palo alto 4", "16566768", "Meghan Ross", "Maine 32", "189980090", "It's a beautiful lizard.", R.drawable.lizard, "lizards");
+        addPet("Saimon", "15/3/2014", "M", "Inguana", "Green", "", 21, "John Appleseed", "Palo alto 4", "16566768", "Meghan Ross", "Maine 32", "189980090", "", R.drawable.lizard, "lizards");
 
  }
 
