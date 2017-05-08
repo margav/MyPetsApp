@@ -27,7 +27,7 @@ public class BrowseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browse_2);
+        setContentView(R.layout.activity_browse);
 
         helper = new DBSchemaHelper(this);
 

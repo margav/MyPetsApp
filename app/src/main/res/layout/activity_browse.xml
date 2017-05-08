@@ -246,7 +246,7 @@
         />
 
     <TextView
-        android:id="@+id/pet_vet_pnone_view"
+        android:id="@+id/pet_vet_phone_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -261,14 +261,17 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/text_for_comments"
         android:layout_toEndOf="@id/text_for_comments"
-        android:layout_below="@id/pet_vet_pnone_view"
+        android:layout_below="@id/pet_vet_phone_view"
         android:layout_marginTop="20sp"
         android:layout_marginLeft="5sp"
         android:layout_marginStart="5sp"
         android:maxLength="100"
         />
 
-
+    <TextView
+        android:id="@+id/view_for_database_results2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <!--Arrow Buttons-->
 
     <ImageButton
