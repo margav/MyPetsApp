@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridView;
     private ListView listView;
 
-    private PetDBSchemaHelper helper;
+    private DBSchemaHelper helper;
     private SQLiteDatabase database;
 
     private List<String> petCategories = PetFactory.getPetCategories();
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        helper = new PetDBSchemaHelper(this);
+        helper = new DBSchemaHelper(this);
 
         listView = (ListView) findViewById(R.id.list_view);
         gridView = (GridView) findViewById(R.id.grid_view);
@@ -75,21 +75,21 @@ public class MainActivity extends AppCompatActivity {
     private ContentValues getContentValues(Pet p) {
         ContentValues values = new ContentValues();
 
-        values.put(PetDBSchema.PetTable.NAME, p.getPetName());
-        values.put(PetDBSchema.PetTable.DATE_OF_BIRTH, p.getDateOfBirth());
-        values.put(PetDBSchema.PetTable.GENDER, p.getSex());
-        values.put(PetDBSchema.PetTable.BREED, p.getBreed());
-        values.put(PetDBSchema.PetTable.COLOUR, p.getColour());
-        values.put(PetDBSchema.PetTable.DISTINGUISHING_MARKS, p.getDistinguishingMarks());
-        values.put(PetDBSchema.PetTable.CHIP_ID, p.getChipId());
-        values.put(PetDBSchema.PetTable.OWNER_NAME, p.getOwnerName());
-        values.put(PetDBSchema.PetTable.OWNER_ADDRESS, p.getOwnerAddress());
-        values.put(PetDBSchema.PetTable.OWNER_PHONE, p.getOwnerPhone());
-        values.put(PetDBSchema.PetTable.VET_NAME, p.getVetName());
-        values.put(PetDBSchema.PetTable.VET_ADDRESS, p.getVetAddress());
-        values.put(PetDBSchema.PetTable.VET_PHONE, p.getVetPhone());
-        values.put(PetDBSchema.PetTable.COMMENTS, p.getComments());
-        values.put(PetDBSchema.PetTable.IMAGE_URI, p.getImageUri());
+        values.put(DBSchema.PetTable.NAME, p.getPetName());
+        values.put(DBSchema.PetTable.DATE_OF_BIRTH, p.getDateOfBirth());
+        values.put(DBSchema.PetTable.GENDER, p.getSex());
+        values.put(DBSchema.PetTable.BREED, p.getBreed());
+        values.put(DBSchema.PetTable.COLOUR, p.getColour());
+        values.put(DBSchema.PetTable.DISTINGUISHING_MARKS, p.getDistinguishingMarks());
+        values.put(DBSchema.PetTable.CHIP_ID, p.getChipId());
+        values.put(DBSchema.PetTable.OWNER_NAME, p.getOwnerName());
+        values.put(DBSchema.PetTable.OWNER_ADDRESS, p.getOwnerAddress());
+        values.put(DBSchema.PetTable.OWNER_PHONE, p.getOwnerPhone());
+        values.put(DBSchema.PetTable.VET_NAME, p.getVetName());
+        values.put(DBSchema.PetTable.VET_ADDRESS, p.getVetAddress());
+        values.put(DBSchema.PetTable.VET_PHONE, p.getVetPhone());
+        values.put(DBSchema.PetTable.COMMENTS, p.getComments());
+        values.put(DBSchema.PetTable.IMAGE_URI, p.getImageUri());
 
         return values;
     }
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private void insertPet(Pet p) {
         database = helper.getWritableDatabase();
         ContentValues values = getContentValues(p);
-        database.insert(PetDBSchema.PetTable.TABLE_NAME, null, values);
+        database.insert(DBSchema.PetTable.TABLE_NAME, null, values);
     }
 
     //menu staff
@@ -144,8 +144,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         database = helper.getWritableDatabase();
-        database.execSQL(PetDBSchema.SQL_DELETE_PETS);
-        database.execSQL(PetDBSchema.SQL_CREATE_PETS);
+        database.execSQL(DBSchema.SQL_DELETE_PETS);
+        database.execSQL(DBSchema.SQL_CREATE_PETS);
     }
 
 }

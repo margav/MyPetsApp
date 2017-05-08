@@ -2,13 +2,13 @@ package com.sdmd.mgava.mypetsapp;
 
 import android.provider.BaseColumns;
 
-public final class PetDBSchema {
+public final class DBSchema {
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
     private static final String COMMA_SEP = ",";
 
-    private PetDBSchema() {}
+    private DBSchema() {}
 
     public static abstract class PetTable implements BaseColumns {
         public static final String TABLE_NAME = "pets";

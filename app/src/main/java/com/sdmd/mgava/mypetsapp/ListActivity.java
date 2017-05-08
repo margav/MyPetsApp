@@ -11,17 +11,17 @@ import android.widget.TextView;
 
 public class ListActivity extends AppCompatActivity {
 
-    private PetDBSchemaHelper helper;
+    private DBSchemaHelper helper;
     private SQLiteDatabase database;
 
-    private static final String[] PROJECTIONS = {PetDBSchema.PetTable.NAME, PetDBSchema.PetTable.BREED, PetDBSchema.PetTable.IMAGE_URI};
+    private static final String[] PROJECTIONS = {DBSchema.PetTable.NAME, DBSchema.PetTable.BREED, DBSchema.PetTable.IMAGE_URI};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        helper = new PetDBSchemaHelper(this);
+        helper = new DBSchemaHelper(this);
 
         getDesiredPets();
 
@@ -39,14 +39,14 @@ public class ListActivity extends AppCompatActivity {
     private void getDesiredPets() {
         database = helper.getReadableDatabase();
 
-        Cursor cursor = database.query(PetDBSchema.PetTable.TABLE_NAME, PROJECTIONS, null, null, null, null, null);
+        Cursor cursor = database.query(DBSchema.PetTable.TABLE_NAME, PROJECTIONS, null, null, null, null, null);
         String results = "";
 
         while (cursor.moveToNext()) {
 
-            String NAME = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.NAME));
-            String BREED = cursor.getString(cursor.getColumnIndex(PetDBSchema.PetTable.BREED));
-            int IMAGE_URI = cursor.getInt(cursor.getColumnIndex(PetDBSchema.PetTable.IMAGE_URI));
+            String NAME = cursor.getString(cursor.getColumnIndex(DBSchema.PetTable.NAME));
+            String BREED = cursor.getString(cursor.getColumnIndex(DBSchema.PetTable.BREED));
+            int IMAGE_URI = cursor.getInt(cursor.getColumnIndex(DBSchema.PetTable.IMAGE_URI));
 
             results += IMAGE_URI + "\t" + NAME + "\t" + BREED + "\n";
         }
