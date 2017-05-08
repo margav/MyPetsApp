@@ -75,21 +75,21 @@ public class MainActivity extends AppCompatActivity {
     private ContentValues getContentValues(PetInfo p) {
         ContentValues values = new ContentValues();
 
-        values.put(DBSchema.PetTable.NAME, p.getPetName());
-        values.put(DBSchema.PetTable.DATE_OF_BIRTH, p.getDateOfBirth());
-        values.put(DBSchema.PetTable.GENDER, p.getSex());
-        values.put(DBSchema.PetTable.BREED, p.getBreed());
-        values.put(DBSchema.PetTable.COLOUR, p.getColour());
-        values.put(DBSchema.PetTable.DISTINGUISHING_MARKS, p.getDistinguishingMarks());
-        values.put(DBSchema.PetTable.CHIP_ID, p.getChipId());
-        values.put(DBSchema.PetTable.OWNER_NAME, p.getOwnerName());
-        values.put(DBSchema.PetTable.OWNER_ADDRESS, p.getOwnerAddress());
-        values.put(DBSchema.PetTable.OWNER_PHONE, p.getOwnerPhone());
-        values.put(DBSchema.PetTable.VET_NAME, p.getVetName());
-        values.put(DBSchema.PetTable.VET_ADDRESS, p.getVetAddress());
-        values.put(DBSchema.PetTable.VET_PHONE, p.getVetPhone());
-        values.put(DBSchema.PetTable.COMMENTS, p.getComments());
-        values.put(DBSchema.PetTable.IMAGE_URI, p.getImageUri());
+        values.put(DBSchema.PetInfoTable.NAME, p.getPetName());
+        values.put(DBSchema.PetInfoTable.DATE_OF_BIRTH, p.getDateOfBirth());
+        values.put(DBSchema.PetInfoTable.GENDER, p.getSex());
+        values.put(DBSchema.PetInfoTable.BREED, p.getBreed());
+        values.put(DBSchema.PetInfoTable.COLOUR, p.getColour());
+        values.put(DBSchema.PetInfoTable.DISTINGUISHING_MARKS, p.getDistinguishingMarks());
+        values.put(DBSchema.PetInfoTable.CHIP_ID, p.getChipId());
+        values.put(DBSchema.PetInfoTable.OWNER_NAME, p.getOwnerName());
+        values.put(DBSchema.PetInfoTable.OWNER_ADDRESS, p.getOwnerAddress());
+        values.put(DBSchema.PetInfoTable.OWNER_PHONE, p.getOwnerPhone());
+        values.put(DBSchema.PetInfoTable.VET_NAME, p.getVetName());
+        values.put(DBSchema.PetInfoTable.VET_ADDRESS, p.getVetAddress());
+        values.put(DBSchema.PetInfoTable.VET_PHONE, p.getVetPhone());
+        values.put(DBSchema.PetInfoTable.COMMENTS, p.getComments());
+        values.put(DBSchema.PetInfoTable.IMAGE_URI, p.getImageUri());
 
         return values;
     }
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private void insertPet(PetInfo p) {
         database = helper.getWritableDatabase();
         ContentValues values = getContentValues(p);
-        database.insert(DBSchema.PetTable.TABLE_NAME, null, values);
+        database.insert(DBSchema.PetInfoTable.TABLE_NAME, null, values);
     }
 
     //menu staff

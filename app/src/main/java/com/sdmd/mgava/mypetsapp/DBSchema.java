@@ -10,7 +10,7 @@ public final class DBSchema {
 
     private DBSchema() {}
 
-    public static abstract class PetTable implements BaseColumns {
+    public static abstract class PetInfoTable implements BaseColumns {
         public static final String TABLE_NAME = "pets";
 
         public static final String NAME = "name";
@@ -30,10 +30,10 @@ public final class DBSchema {
         public static final String IMAGE_URI = "image_uri";
     }
 
-    static final String SQL_CREATE_PETS = "CREATE TABLE " + PetTable.TABLE_NAME + " (" + PetTable._ID +  INT_TYPE + " PRIMARY KEY AUTOINCREMENT," + PetTable.NAME + TEXT_TYPE + COMMA_SEP + PetTable.DATE_OF_BIRTH + TEXT_TYPE + COMMA_SEP +
-            PetTable.GENDER + TEXT_TYPE + COMMA_SEP + PetTable.BREED + TEXT_TYPE + COMMA_SEP + PetTable.COLOUR + TEXT_TYPE + COMMA_SEP + PetTable.DISTINGUISHING_MARKS + TEXT_TYPE + COMMA_SEP + PetTable.CHIP_ID + INT_TYPE + COMMA_SEP +
-            PetTable.OWNER_NAME + TEXT_TYPE + COMMA_SEP + PetTable.OWNER_ADDRESS + TEXT_TYPE + COMMA_SEP + PetTable.OWNER_PHONE + TEXT_TYPE + COMMA_SEP + PetTable.VET_NAME + TEXT_TYPE + COMMA_SEP + PetTable.VET_ADDRESS + TEXT_TYPE + COMMA_SEP +
-            PetTable.VET_PHONE + TEXT_TYPE + COMMA_SEP + PetTable.COMMENTS + TEXT_TYPE + COMMA_SEP + PetTable.IMAGE_URI + INT_TYPE + " )";
+    static final String SQL_CREATE_PETS = "CREATE TABLE " + PetInfoTable.TABLE_NAME + " (" + PetInfoTable._ID +  INT_TYPE + " PRIMARY KEY AUTOINCREMENT," + PetInfoTable.NAME + TEXT_TYPE + COMMA_SEP + PetInfoTable.DATE_OF_BIRTH + TEXT_TYPE + COMMA_SEP +
+            PetInfoTable.GENDER + TEXT_TYPE + COMMA_SEP + PetInfoTable.BREED + TEXT_TYPE + COMMA_SEP + PetInfoTable.COLOUR + TEXT_TYPE + COMMA_SEP + PetInfoTable.DISTINGUISHING_MARKS + TEXT_TYPE + COMMA_SEP + PetInfoTable.CHIP_ID + INT_TYPE + COMMA_SEP +
+            PetInfoTable.OWNER_NAME + TEXT_TYPE + COMMA_SEP + PetInfoTable.OWNER_ADDRESS + TEXT_TYPE + COMMA_SEP + PetInfoTable.OWNER_PHONE + TEXT_TYPE + COMMA_SEP + PetInfoTable.VET_NAME + TEXT_TYPE + COMMA_SEP + PetInfoTable.VET_ADDRESS + TEXT_TYPE + COMMA_SEP +
+            PetInfoTable.VET_PHONE + TEXT_TYPE + COMMA_SEP + PetInfoTable.COMMENTS + TEXT_TYPE + COMMA_SEP + PetInfoTable.IMAGE_URI + INT_TYPE + " )";
 
-    static final String SQL_DELETE_PETS = "DROP TABLE IF EXISTS " + PetTable.TABLE_NAME;
+    static final String SQL_DELETE_PETS = "DROP TABLE IF EXISTS " + PetInfoTable.TABLE_NAME;
 }

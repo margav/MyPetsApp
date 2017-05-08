@@ -14,7 +14,7 @@ public class ListActivity extends AppCompatActivity {
     private DBSchemaHelper helper;
     private SQLiteDatabase database;
 
-    private static final String[] PROJECTIONS = {DBSchema.PetTable.NAME, DBSchema.PetTable.BREED, DBSchema.PetTable.IMAGE_URI};
+    private static final String[] PROJECTIONS = {DBSchema.PetInfoTable.NAME, DBSchema.PetInfoTable.BREED, DBSchema.PetInfoTable.IMAGE_URI};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +39,14 @@ public class ListActivity extends AppCompatActivity {
     private void getDesiredPets() {
         database = helper.getReadableDatabase();
 
-        Cursor cursor = database.query(DBSchema.PetTable.TABLE_NAME, PROJECTIONS, null, null, null, null, null);
+        Cursor cursor = database.query(DBSchema.PetInfoTable.TABLE_NAME, PROJECTIONS, null, null, null, null, null);
         String results = "";
 
         while (cursor.moveToNext()) {
 
-            String NAME = cursor.getString(cursor.getColumnIndex(DBSchema.PetTable.NAME));
-            String BREED = cursor.getString(cursor.getColumnIndex(DBSchema.PetTable.BREED));
-            int IMAGE_URI = cursor.getInt(cursor.getColumnIndex(DBSchema.PetTable.IMAGE_URI));
+            String NAME = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.NAME));
+            String BREED = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.BREED));
+            int IMAGE_URI = cursor.getInt(cursor.getColumnIndex(DBSchema.PetInfoTable.IMAGE_URI));
 
             results += IMAGE_URI + "\t" + NAME + "\t" + BREED + "\n";
         }
