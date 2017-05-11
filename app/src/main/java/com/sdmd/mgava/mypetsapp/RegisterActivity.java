@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent2);
             }
             else {
-                Toast.makeText(RegisterActivity.this, "Didn't manage to register user", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, "No register user", Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -54,23 +54,23 @@ public class RegisterActivity extends AppCompatActivity {
         button_to_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText edt_registry_username = (EditText) findViewById(R.id.ed_registry_username);
-                EditText edt_registry_password = (EditText) findViewById(R.id.ed_registry_password);
-                EditText edt_registry_confirm_password = (EditText) findViewById(R.id.ed_registry_confirm_password);
-                EditText edt_registry_users_name = (EditText) findViewById(R.id.ed_registry_users_name);
-                EditText edt_registry_users_surname = (EditText) findViewById(R.id.ed_registry_users_surname);
+                EditText ed_registry_username = (EditText) findViewById(R.id.ed_registry_username);
+                EditText ed_registry_password = (EditText) findViewById(R.id.ed_registry_password);
+                EditText ed_registry_confirm_password = (EditText) findViewById(R.id.ed_registry_confirm_password);
+                EditText ed_registry_users_name = (EditText) findViewById(R.id.ed_registry_users_name);
+                EditText ed_registry_users_surname = (EditText) findViewById(R.id.ed_registry_users_surname);
 
-                String username = edt_registry_username.getText().toString();
-                String password = edt_registry_password.getText().toString();
-                String confirmedPassword = edt_registry_confirm_password.getText().toString();
-                String nameOfUser = edt_registry_users_name.getText().toString().trim();
-                String lastNameOfUser = edt_registry_users_surname.getText().toString().trim();
+                String username = ed_registry_username.getText().toString();
+                String password = ed_registry_password.getText().toString();
+                String confirmedPassword = ed_registry_confirm_password.getText().toString();
+                String nameOfUser = ed_registry_users_name.getText().toString().trim();
+                String lastNameOfUser = ed_registry_users_surname.getText().toString().trim();
 
                 if (password.length() < 6) {
-                    edt_registry_password.setError("Must be at least 6 characters!");
+                    ed_registry_password.setError("Must be at least 6 characters!");
                 }
                 else if (!password.equals(confirmedPassword)) {
-                    edt_registry_confirm_password.setError("Password and confirmed password must be the same!");
+                    ed_registry_confirm_password.setError("Password and confirmed password must be match!");
                 }
                 else {
                     Intent intent = new Intent(RegisterActivity.this, UserActivity.class);

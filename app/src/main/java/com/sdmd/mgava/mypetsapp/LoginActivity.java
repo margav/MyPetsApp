@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
-        static final String SHARED_PREFERENCES_FILE = "my.preferences.file";
+        static final String SHARED_PREFERENCES_FILE = "preferences.file";
         static final String SHARED_PREFERENCES_FILE_KEY_USERNAME = "username.preferences.file";
         static final String SHARED_PREFERENCES_FILE_KEY_STATUS = "status.preferences.file";
         private BroadcastReceiver getUserResultBroadcastReceiver = new BroadcastReceiver() {
@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent0);
                 }
                 else {
-                    Toast.makeText(LoginActivity.this, "Didn't manage to log in.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "No log in.", Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -49,8 +49,8 @@ public class LoginActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login);
 
-            Button button_register = (Button) findViewById(R.id.button_go_register);
-            Button button_login = (Button) findViewById(R.id.button_log_in);
+            Button button_register = (Button) findViewById(R.id.button_register);
+            Button button_login = (Button) findViewById(R.id.button_login);
 
             button_register.setOnClickListener(new View.OnClickListener() {
                 @Override
