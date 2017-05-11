@@ -3,9 +3,7 @@ package com.sdmd.mgava.mypetsapp;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-
 import com.google.json.Json;
-
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -38,7 +36,6 @@ public class UserActivity extends AppCompatActivity {
     public UserActivity() {
         super("User Activity");
     }
-
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
@@ -51,7 +48,6 @@ public class UserActivity extends AppCompatActivity {
         }
     }
     private void createUser(Intent intent) {
-
         try {
             String username = intent.getStringExtra(EXTRA_USERNAME);
             String password = intent.getStringExtra(EXTRA_PASSWORD);
@@ -68,14 +64,12 @@ public class UserActivity extends AppCompatActivity {
             conn.addRequestProperty("Content-Type", "application/json");
             User user = new User(username, password, nameOfUser, lastNameOfUser);
             String userJson = new Json().toJson(user);
-
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
             writer.write(userJson);
             writer.flush();
             writer.close();
             conn.getOutputStream().close();
             conn.connect();
-
             int response = conn.getResponseCode();
             Intent resultIntent = new Intent(CREATE_USER_RESULT);
             if (response >= 200 && response < 300) {
@@ -109,18 +103,14 @@ public class UserActivity extends AppCompatActivity {
             conn.setDoInput(true);
             conn.connect();
             int response = conn.getResponseCode();
-
             is = conn.getInputStream();
-
             String user = convertStreamToString(is);
             User registeredUser = new Json().fromJson(user, User.class);
-
             if (username.equals(registeredUser.getUserName()) && password.equals(registeredUser.getPassword()) && (response >= 200 && response < 300)) {
                 Intent resultIntent = new Intent(GET_USER_RESULT);
                 resultIntent.putExtra(RegisterActivity.KEY_FOR_STATUS, true);
                 resultIntent.putExtra(EXTRA_MESSAGE_FROM_SERVER, response);
                 resultIntent.putExtra(EXTRA_KEY_FOR_USERNAME, registeredUser.getUserName());
-
                 LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
             } else {
                 Intent resultIntent = new Intent(GET_USER_RESULT);
@@ -128,7 +118,6 @@ public class UserActivity extends AppCompatActivity {
                 resultIntent.putExtra(EXTRA_MESSAGE_FROM_SERVER, response);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(resultIntent);
             }
-
         } catch (Exception e) {
             Intent resultIntent = new Intent(GET_USER_RESULT);
             resultIntent.putExtra(EXTRA_USER_RESULT, EXTRA_USER_RESULT_ERROR);
