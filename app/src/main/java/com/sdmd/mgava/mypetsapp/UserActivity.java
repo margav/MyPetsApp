@@ -18,8 +18,8 @@ import java.net.URL;
 public class UserActivity extends AppCompatActivity {
 
 
-    public static final String EXTRA_NAME_OF_USER = "first.name";
-    public static final String EXTRA_LASTNAME_OF_USER = "last.name";
+    public static final String EXTRA_NAME_OF_USER = "firstname";
+    public static final String EXTRA_LASTNAME_OF_USER = "lastname";
     public static final String EXTRA_USERNAME = "username";
     public static final String EXTRA_PASSWORD = "password";
     public static final String CREATE_USER = "create user";
@@ -27,7 +27,7 @@ public class UserActivity extends AppCompatActivity {
     public static final String CREATE_USER_RESULT = "create user result";
     public static final String GET_USER_RESULT = " get user result";
     public static final String EXTRA_USER_RESULT = "user result";
-    public static final String EXTRA_USER_RESULT_ERROR = "Nothing found.";
+    public static final String EXTRA_USER_RESULT_ERROR = "No Results.";
     public static final String EXTRA_MESSAGE_FROM_SERVER = "message";
     public static final String EXTRA_KEY_FOR_USERNAME = "username";
     private static final String GET_USER_URL = "http://hodor.ait.gr:8080/myPets/api/user/";
