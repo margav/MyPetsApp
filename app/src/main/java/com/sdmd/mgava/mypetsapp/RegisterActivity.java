@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent2);
             }
             else {
-                Toast.makeText(RegisterActivity.this, "No register user", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, "No registered user", Toast.LENGTH_LONG).show();
             }
         }
     };
