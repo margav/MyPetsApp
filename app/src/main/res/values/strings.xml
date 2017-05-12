@@ -17,4 +17,6 @@
     <string name="list">List View</string>
     <string name="grid">Grid View</string>
 
+    <item name="ed_Text_Name" type="id" />
+    <item name="ed_email" type="id" />
 </resources>
