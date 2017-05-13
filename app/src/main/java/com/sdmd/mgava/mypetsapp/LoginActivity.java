@@ -1,94 +1,132 @@
 package com.sdmd.mgava.mypetsapp;
 
-import android.content.BroadcastReceiver;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-
 import android.widget.Toast;
 
+public class LoginActivity extends Activity implements OnClickListener
+{
 
-public class LoginActivity extends AppCompatActivity {
+    Button mLogin;
+    Button mRegister;
 
-        static final String SHARED_PREFERENCES_FILE = "preferences.file";
-        static final String SHARED_PREFERENCES_FILE_KEY_USERNAME = "username.preferences.file";
-        static final String SHARED_PREFERENCES_FILE_KEY_STATUS = "status.preferences.file";
-        private BroadcastReceiver getUserResultBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Boolean booleanResult = intent.getBooleanExtra(RegisterActivity.KEY_FOR_STATUS,false);
-                int response = intent.getIntExtra(UserActivity.EXTRA_MESSAGE_FROM_SERVER, -1);
-                String username = intent.getStringExtra(UserActivity.EXTRA_KEY_FOR_USERNAME);
-                Toast.makeText(LoginActivity.this, "Response: " + response, Toast.LENGTH_LONG).show();
-                if (booleanResult)            {
+    EditText muname;
+    EditText mpassword;
 
-                    SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_FILE, 0);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(SHARED_PREFERENCES_FILE_KEY_USERNAME, username);
-                    editor.putBoolean(SHARED_PREFERENCES_FILE_KEY_STATUS, true);
-                    editor.apply();
+    DBSchemaHelper DB = null;
 
-                    Intent intent0 = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent0);
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mRegister = (Button)findViewById(R.id.register);
+        mRegister.setOnClickListener(this);
+
+        mLogin = (Button)findViewById(R.id.login);
+        mLogin.setOnClickListener(this);
+
+    }
+
+
+    public void onClick(View v)
+    {
+        switch(v.getId())
+        {
+
+            case R.id.register:
+                Intent i = new Intent(getBaseContext(), RegisterActivity.class);
+                startActivity(i);
+                break;
+
+            case R.id.login:
+
+                muname = (EditText)findViewById(R.id.edituname);
+                mpassword = (EditText)findViewById(R.id.editpw);
+
+                String username = muname.getText().toString();
+                String password = mpassword.getText().toString();
+
+
+
+                if(username.equals("") || username == null)
+                {
+                    Toast.makeText(getApplicationContext(), "Please enter User Name", Toast.LENGTH_SHORT).show();
                 }
-                else {
-                    Toast.makeText(LoginActivity.this, "No log in.", Toast.LENGTH_LONG).show();
+                else if(password.equals("") || password == null)
+                {
+                    Toast.makeText(getApplicationContext(), "Please enter your Password", Toast.LENGTH_SHORT).show();
                 }
-            }
-        };
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_login);
-
-            Button button_register = (Button) findViewById(R.id.button_register);
-            Button button_login = (Button) findViewById(R.id.button_login);
-
-            button_register.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                    startActivity(intent);
+                else
+                {
+                    boolean validLogin = validateLogin(username, password, getBaseContext());
+                    if(validLogin)
+                    {
+                        //System.out.println("In Valid");
+                        Intent in = new Intent(getBaseContext(), MainActivity.class);
+                        in.putExtra("UserName", muname.getText().toString());
+                        startActivity(in);
+                        //finish();
+                    }
                 }
-            });
-            button_login.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditText ed_username = (EditText) findViewById(R.id.ed_username);
-                    EditText ed_password = (EditText) findViewById(R.id.ed_password);
-                    String username = ed_username.getText().toString();
-                    String password = ed_password.getText().toString();
-                    Intent intent = new Intent(LoginActivity.this, UserActivity.class);
-                    intent.setAction(UserActivity.GET_USER);
-                    intent.putExtra(UserActivity.EXTRA_TEST_USERNAME, username);
-                    intent.putExtra(UserActivity.EXTRA_TEST_PASSWORD, password);
-                    startService(intent);
-                }
-            });
-        }
+                break;
 
-        @Override
-        protected void onResume() {
-            super.onResume();
-
-            LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-            IntentFilter getUserResultIntentFilter = new IntentFilter(UserActivity.GET_USER_RESULT);
-            broadcastManager.registerReceiver(getUserResultBroadcastReceiver, getUserResultIntentFilter);
-
-        }
-        @Override
-        protected void onPause() {
-            super.onPause();
-            LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-            broadcastManager.unregisterReceiver(getUserResultBroadcastReceiver);
         }
 
     }
+
+
+    private boolean validateLogin(String username, String password, Context baseContext)
+    {
+        DB = new DBSchemaHelper(getBaseContext());
+        SQLiteDatabase db = DB.getReadableDatabase();
+
+        String[] columns = {"_id"};
+
+        String selection = "username=? AND password=?";
+        String[] selectionArgs = {username,password};
+
+        Cursor cursor = null;
+        try{
+
+            cursor = db.query(DBSchemaHelper.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
+            startManagingCursor(cursor);
+        }
+        catch(Exception e)
+
+        {
+            e.printStackTrace();
+        }
+        int numberOfRows = cursor.getCount();
+
+        if(numberOfRows <= 0)
+        {
+
+            Toast.makeText(getApplicationContext(), "User Name and Password miss match..\nPlease Try Again", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+            startActivity(intent);
+            return false;
+        }
+
+
+        return true;
+
+    }
+
+    public void onDestroy()
+    {
+        super.onDestroy();
+        DB.close();
+    }
+}
+

@@ -1,111 +1,208 @@
 package com.sdmd.mgava.mypetsapp;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.content.ContentValues;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-public class RegisterActivity extends AppCompatActivity {
 
-    public static final String KEY_FOR_STATUS = "key_for_status";
+public class RegisterActivity extends AppCompatActivity implements OnClickListener, OnItemSelectedListener
 
-    private BroadcastReceiver createUserResultBroadcastReceiver = new BroadcastReceiver() {
+
+    {
+        // Variable Declaration should be in onCreate()
+        private Button mSubmit;
+        private Button mCancel;
+
+        private EditText mFname;
+        private EditText mLname;
+        private EditText mUsername;
+        private EditText mPassword;
+        private EditText mEmail;
+        private Spinner mGender;
+        private String Gen;
+
+        protected DBSchemaHelper DB = new DBSchemaHelper(RegisterActivity.this);
+
         @Override
-        public void onReceive(Context context, Intent intent) {
-            Boolean booleanResult = intent.getBooleanExtra(RegisterActivity.KEY_FOR_STATUS, false);
-            int response = intent.getIntExtra(UserActivity.EXTRA_MESSAGE_FROM_SERVER, -1);
-            String username = intent.getStringExtra(UserActivity.EXTRA_KEY_FOR_USERNAME);
+        protected void onCreate(Bundle savedInstanceState) {
 
-            Toast.makeText(RegisterActivity.this, "Status: " + String.valueOf(booleanResult), Toast.LENGTH_LONG).show();
-            Toast.makeText(RegisterActivity.this, "Response: " + response, Toast.LENGTH_LONG).show();
 
-            if (booleanResult) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_register);
 
-                SharedPreferences preferences = getSharedPreferences(LoginActivity.SHARED_PREFERENCES_FILE, 0);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(LoginActivity.SHARED_PREFERENCES_FILE_KEY_USERNAME, username);
-                editor.putBoolean(LoginActivity.SHARED_PREFERENCES_FILE_KEY_STATUS, true);
-                editor.apply();
+            //Assignment of UI fields to the variables
+            mSubmit = (Button)findViewById(R.id.submit);
+            mSubmit.setOnClickListener(this);
 
-                Intent intent2 = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(intent2);
-            }
-            else {
-                Toast.makeText(RegisterActivity.this, "No registered user", Toast.LENGTH_LONG).show();
+            mCancel = (Button)findViewById(R.id.cancel);
+            mCancel.setOnClickListener(this);
+
+            mFname = (EditText)findViewById(R.id.efname);
+            mLname = (EditText)findViewById(R.id.elname);
+
+            mUsername = (EditText)findViewById(R.id.reuname);
+            mPassword = (EditText)findViewById(R.id.repass);
+            mEmail = (EditText)findViewById(R.id.eemail);
+
+
+            mGender = (Spinner)findViewById(R.id.spinner1);
+
+            // Spinner method to read the on selected value
+            ArrayAdapter<State> spinnerArrayAdapter = new ArrayAdapter<State>(this,
+                    android.R.layout.simple_spinner_item, new State[] {
+                    new State("Male"),
+                    new State("Female")});
+            mGender.setAdapter(spinnerArrayAdapter);
+            mGender.setOnItemSelectedListener(this);
+        }
+
+
+
+        public void onClick(View v)
+        {
+
+            switch(v.getId()){
+
+                case R.id.cancel:
+                    Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                    startActivity(i);
+                    //finish();
+                    break;
+
+                case R.id.submit:
+
+
+                    String fname = mFname.getText().toString();
+                    String lname = mLname.getText().toString();
+
+                    String uname = mUsername.getText().toString();
+                    String pass = mPassword.getText().toString();
+                    String email = mEmail.getText().toString();
+
+
+                    boolean invalid = false;
+
+                    if(fname.equals(""))
+                    {
+                        invalid = true;
+                        Toast.makeText(getApplicationContext(), "Enter your Firstname", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+
+                    if(lname.equals(""))
+                    {
+                        invalid = true;
+                        Toast.makeText(getApplicationContext(), "Please enter your Lastname", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+
+                    if(uname.equals(""))
+                    {
+                        invalid = true;
+                        Toast.makeText(getApplicationContext(), "Please enter your Username", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+
+
+                    if(pass.equals(""))
+                    {
+                        invalid = true;
+                        Toast.makeText(getApplicationContext(), "Please enter your Password", Toast.LENGTH_SHORT).show();
+
+                    }
+                    else
+                    if(email.equals(""))
+                    {
+                        invalid = true;
+                        Toast.makeText(getApplicationContext(), "Please enter your Email ID", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    if(invalid == false)
+                    {
+                        addEntry(fname, lname, Gen, uname, pass, email);
+                        Intent i_register = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(i_register);
+                        //finish();
+                    }
+
+                    break;
             }
         }
-    };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
 
-        Button button_to_register = (Button) findViewById(R.id.button_to_register);
 
-        button_to_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText ed_register_username = (EditText) findViewById(R.id.ed_registry_username);
-                EditText ed_register_password = (EditText) findViewById(R.id.ed_registry_password);
-                EditText ed_register_confirm_password = (EditText) findViewById(R.id.ed_registry_confirm_password);
-                EditText ed_register_users_name = (EditText) findViewById(R.id.ed_registry_users_name);
-                EditText ed_register_users_surname = (EditText) findViewById(R.id.ed_registry_users_surname);
 
-                String username = ed_register_username.getText().toString();
-                String password = ed_register_password.getText().toString();
-                String confirmedPassword = ed_register_confirm_password.getText().toString();
-                String nameOfUser = ed_register_users_name.getText().toString().trim();
-                String lastNameOfUser = ed_register_users_surname.getText().toString().trim();
 
-                if (password.length() < 6) {
-                    ed_register_password.setError("Must be at least 6 characters!");
-                }
-                else if (!password.equals(confirmedPassword)) {
-                    ed_register_confirm_password.setError("Password and confirmed password must be match!");
-                }
-                else {
-                    Intent intent = new Intent(RegisterActivity.this, UserActivity.class);
-                    intent.setAction(UserActivity.CREATE_USER);
+        public void onDestroy()
+        {
+            super.onDestroy();
+            DB.close();
+        }
 
-                    intent.putExtra(UserActivity.EXTRA_NAME_OF_USER, nameOfUser);
-                    intent.putExtra(UserActivity.EXTRA_LASTNAME_OF_USER, lastNameOfUser);
-                    intent.putExtra(UserActivity.EXTRA_USERNAME, username);
-                    intent.putExtra(UserActivity.EXTRA_PASSWORD, password);
 
-                    startService(intent);
-                }
+
+        private void addEntry(String fname, String lname, String Gen, String uname, String pass, String email)
+        {
+
+            SQLiteDatabase db = DB.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put("firstname", fname);
+            values.put("lastname", lname);
+            values.put("gender", Gen);
+            values.put("username", uname);
+            values.put("password", pass);
+            values.put("email", email);
+
+            try
+            {
+                db.insert(DBSchemaHelper.TABLE_NAME, null, values);
+
+                Toast.makeText(getApplicationContext(), "your details submitted Successfully...", Toast.LENGTH_SHORT).show();
             }
-        });
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
 
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+        {
+            // Get the currently selected State object from the spinner
+            State st = (State)mGender.getSelectedItem();
 
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+            // Show it via a toast
+            toastState( "onItemSelected", st );
+        }
 
-        IntentFilter createUserResultIntentFilter = new IntentFilter(UserActivity.CREATE_USER_RESULT);
-        broadcastManager.registerReceiver(createUserResultBroadcastReceiver, createUserResultIntentFilter);
 
-    }
+        public void toastState(String name, State st)
+        {
+            if ( st != null )
+            {
+                Gen = st.name;
+                //Toast.makeText(getBaseContext(), Gen, Toast.LENGTH_SHORT).show();
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-        broadcastManager.unregisterReceiver(createUserResultBroadcastReceiver);
-    }
+            }
 
-    private class KEY_FOR_STATUS {
-    }
-}
+        }
+
+
+        public void onNothingSelected(AdapterView<?> arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+    }}
