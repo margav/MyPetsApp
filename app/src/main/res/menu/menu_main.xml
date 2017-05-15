@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item android:id="@+id/menu_btn_list_view"
-        android:title="@string/list" />
+    <!--<item android:id="@+id/menu_btn_list_view"-->
+        <!--android:title="@string/list" />-->
 
-    <item android:id="@+id/menu_btn_grid_view"
-        android:title="@string/grid"/>
-    <item android:id="@+id/menu_login"
-        android:title="Log in" />
+    <!--<item android:id="@+id/menu_btn_grid_view"-->
+        <!--android:title="@string/grid"/>-->
+    <!--<item android:id="@+id/menu_login"-->
+        <!--android:title="Log in" />-->
 
-    <item android:id="@+id/menu_logout"
-        android:title="Log out" />
-
+    <!--<item android:id="@+id/menu_logout"-->
+        <!--android:title="Log out" />-->
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="settings"
+        app:showAsAction="never" />
 </menu>
 

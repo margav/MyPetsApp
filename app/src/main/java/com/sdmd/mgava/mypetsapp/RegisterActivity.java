@@ -1,208 +1,178 @@
 package com.sdmd.mgava.mypetsapp;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class RegisterActivity extends AppCompatActivity implements OnClickListener, OnItemSelectedListener
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 
-    {
-        // Variable Declaration should be in onCreate()
-        private Button mSubmit;
-        private Button mCancel;
+public class RegisterActivity extends ActionBarActivity {
 
-        private EditText mFname;
-        private EditText mLname;
-        private EditText mUsername;
-        private EditText mPassword;
-        private EditText mEmail;
-        private Spinner mGender;
-        private String Gen;
+    protected EditText username;
+    private EditText password;
+    private EditText email;
+    protected String enteredUsername;
+    private final String serverUrl = "Path to your server";
 
-        protected DBSchemaHelper DB = new DBSchemaHelper(RegisterActivity.this);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+
+        username = (EditText)findViewById(R.id.username_field);
+        password = (EditText)findViewById(R.id.password_field);
+        email = (EditText)findViewById(R.id.email_field);
+        Button signUpButton = (Button)findViewById(R.id.sign_up);
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enteredUsername = username.getText().toString();
+                String enteredPassword = password.getText().toString();
+                String enteredEmail = email.getText().toString();
+
+                if(enteredUsername.equals("") || enteredPassword.equals("") || enteredEmail.equals("")){
+                    Toast.makeText(RegisterActivity.this, "Username or password or email must be filled", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(enteredUsername.length() <= 1 || enteredPassword.length() <= 1){
+                    Toast.makeText(RegisterActivity.this, "Username or password length must be greater than one", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                // request authentication with remote server4
+                AsyncDataClass asyncRequestObject = new AsyncDataClass();
+                asyncRequestObject.execute(serverUrl, enteredUsername, enteredPassword, enteredEmail);
+            }
+        });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_register, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    private class AsyncDataClass extends AsyncTask<String, Void, String> {
 
         @Override
-        protected void onCreate(Bundle savedInstanceState) {
+        protected String doInBackground(String... params) {
 
+            HttpParams httpParameters = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
+            HttpConnectionParams.setSoTimeout(httpParameters, 5000);
 
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_register);
+            HttpClient httpClient = new DefaultHttpClient(httpParameters);
+            HttpPost httpPost = new HttpPost(params[0]);
 
-            //Assignment of UI fields to the variables
-            mSubmit = (Button)findViewById(R.id.submit);
-            mSubmit.setOnClickListener(this);
+            String jsonResult = "";
+            try {
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+                nameValuePairs.add(new BasicNameValuePair("username", params[1]));
+                nameValuePairs.add(new BasicNameValuePair("password", params[2]));
+                nameValuePairs.add(new BasicNameValuePair("email", params[3]));
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-            mCancel = (Button)findViewById(R.id.cancel);
-            mCancel.setOnClickListener(this);
+                HttpResponse response = httpClient.execute(httpPost);
+                jsonResult = inputStreamToString(response.getEntity().getContent()).toString();
+                System.out.println("Returned Json object " + jsonResult.toString());
 
-            mFname = (EditText)findViewById(R.id.efname);
-            mLname = (EditText)findViewById(R.id.elname);
-
-            mUsername = (EditText)findViewById(R.id.reuname);
-            mPassword = (EditText)findViewById(R.id.repass);
-            mEmail = (EditText)findViewById(R.id.eemail);
-
-
-            mGender = (Spinner)findViewById(R.id.spinner1);
-
-            // Spinner method to read the on selected value
-            ArrayAdapter<State> spinnerArrayAdapter = new ArrayAdapter<State>(this,
-                    android.R.layout.simple_spinner_item, new State[] {
-                    new State("Male"),
-                    new State("Female")});
-            mGender.setAdapter(spinnerArrayAdapter);
-            mGender.setOnItemSelectedListener(this);
-        }
-
-
-
-        public void onClick(View v)
-        {
-
-            switch(v.getId()){
-
-                case R.id.cancel:
-                    Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                    startActivity(i);
-                    //finish();
-                    break;
-
-                case R.id.submit:
-
-
-                    String fname = mFname.getText().toString();
-                    String lname = mLname.getText().toString();
-
-                    String uname = mUsername.getText().toString();
-                    String pass = mPassword.getText().toString();
-                    String email = mEmail.getText().toString();
-
-
-                    boolean invalid = false;
-
-                    if(fname.equals(""))
-                    {
-                        invalid = true;
-                        Toast.makeText(getApplicationContext(), "Enter your Firstname", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-
-                    if(lname.equals(""))
-                    {
-                        invalid = true;
-                        Toast.makeText(getApplicationContext(), "Please enter your Lastname", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-
-                    if(uname.equals(""))
-                    {
-                        invalid = true;
-                        Toast.makeText(getApplicationContext(), "Please enter your Username", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-
-
-                    if(pass.equals(""))
-                    {
-                        invalid = true;
-                        Toast.makeText(getApplicationContext(), "Please enter your Password", Toast.LENGTH_SHORT).show();
-
-                    }
-                    else
-                    if(email.equals(""))
-                    {
-                        invalid = true;
-                        Toast.makeText(getApplicationContext(), "Please enter your Email ID", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    if(invalid == false)
-                    {
-                        addEntry(fname, lname, Gen, uname, pass, email);
-                        Intent i_register = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(i_register);
-                        //finish();
-                    }
-
-                    break;
-            }
-        }
-
-
-
-
-
-        public void onDestroy()
-        {
-            super.onDestroy();
-            DB.close();
-        }
-
-
-
-        private void addEntry(String fname, String lname, String Gen, String uname, String pass, String email)
-        {
-
-            SQLiteDatabase db = DB.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put("firstname", fname);
-            values.put("lastname", lname);
-            values.put("gender", Gen);
-            values.put("username", uname);
-            values.put("password", pass);
-            values.put("email", email);
-
-            try
-            {
-                db.insert(DBSchemaHelper.TABLE_NAME, null, values);
-
-                Toast.makeText(getApplicationContext(), "your details submitted Successfully...", Toast.LENGTH_SHORT).show();
-            }
-            catch(Exception e)
-            {
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+            return jsonResult;
         }
-
-
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-        {
-            // Get the currently selected State object from the spinner
-            State st = (State)mGender.getSelectedItem();
-
-            // Show it via a toast
-            toastState( "onItemSelected", st );
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
-
-
-        public void toastState(String name, State st)
-        {
-            if ( st != null )
-            {
-                Gen = st.name;
-                //Toast.makeText(getBaseContext(), Gen, Toast.LENGTH_SHORT).show();
-
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            System.out.println("Resulted Value: " + result);
+            if(result.equals("") || result == null){
+                Toast.makeText(RegisterActivity.this, "Server connection failed", Toast.LENGTH_LONG).show();
+                return;
             }
-
+            int jsonResult = returnParsedJsonObject(result);
+            if(jsonResult == 0){
+                Toast.makeText(RegisterActivity.this, "Invalid username or password or email", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(jsonResult == 1){
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                intent.putExtra("USERNAME", enteredUsername);
+                intent.putExtra("MESSAGE", "You have been successfully Registered");
+                startActivity(intent);
+            }
         }
-
-
-        public void onNothingSelected(AdapterView<?> arg0) {
-            // TODO Auto-generated method stub
-
+        private StringBuilder inputStreamToString(InputStream is) {
+            String rLine = "";
+            StringBuilder answer = new StringBuilder();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            try {
+                while ((rLine = br.readLine()) != null) {
+                    answer.append(rLine);
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return answer;
         }
+    }
+    private int returnParsedJsonObject(String result){
 
-    }}
+        JSONObject resultObject = null;
+        int returnedResult = 0;
+        try {
+            resultObject = new JSONObject(result);
+            returnedResult = resultObject.getInt("success");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return returnedResult;
+    }
+}

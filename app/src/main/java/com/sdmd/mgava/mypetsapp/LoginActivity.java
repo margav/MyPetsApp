@@ -1,132 +1,53 @@
 package com.sdmd.mgava.mypetsapp;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
 
-public class LoginActivity extends Activity implements OnClickListener
-{
+public class LoginActivity extends ActionBarActivity {
 
-    Button mLogin;
-    Button mRegister;
-
-    EditText muname;
-    EditText mpassword;
-
-    DBSchemaHelper DB = null;
-
-    /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
-        mRegister = (Button)findViewById(R.id.register);
-        mRegister.setOnClickListener(this);
+        Intent intent = getIntent();
+        Bundle intentBundle = intent.getExtras();
+        String loggedUser = intentBundle.getString("USERNAME");
+        loggedUser = capitalizeFirstCharacter(loggedUser);
+        String message = intentBundle.getString("MESSAGE");
 
-        mLogin = (Button)findViewById(R.id.login);
-        mLogin.setOnClickListener(this);
-
+        TextView loginUsername = (TextView)findViewById(R.id.login_user);
+        TextView successMessage = (TextView)findViewById(R.id.message);
+        loginUsername.setText(loggedUser);
+        successMessage.setText(message);
     }
-
-
-    public void onClick(View v)
-    {
-        switch(v.getId())
-        {
-
-            case R.id.register:
-                Intent i = new Intent(getBaseContext(), RegisterActivity.class);
-                startActivity(i);
-                break;
-
-            case R.id.login:
-
-                muname = (EditText)findViewById(R.id.edituname);
-                mpassword = (EditText)findViewById(R.id.editpw);
-
-                String username = muname.getText().toString();
-                String password = mpassword.getText().toString();
-
-
-
-                if(username.equals("") || username == null)
-                {
-                    Toast.makeText(getApplicationContext(), "Please enter User Name", Toast.LENGTH_SHORT).show();
-                }
-                else if(password.equals("") || password == null)
-                {
-                    Toast.makeText(getApplicationContext(), "Please enter your Password", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    boolean validLogin = validateLogin(username, password, getBaseContext());
-                    if(validLogin)
-                    {
-                        //System.out.println("In Valid");
-                        Intent in = new Intent(getBaseContext(), MainActivity.class);
-                        in.putExtra("UserName", muname.getText().toString());
-                        startActivity(in);
-                        //finish();
-                    }
-                }
-                break;
-
-        }
-
-    }
-
-
-    private boolean validateLogin(String username, String password, Context baseContext)
-    {
-        DB = new DBSchemaHelper(getBaseContext());
-        SQLiteDatabase db = DB.getReadableDatabase();
-
-        String[] columns = {"_id"};
-
-        String selection = "username=? AND password=?";
-        String[] selectionArgs = {username,password};
-
-        Cursor cursor = null;
-        try{
-
-            cursor = db.query(DBSchemaHelper.TABLE_NAME, columns, selection, selectionArgs, null, null, null);
-            startManagingCursor(cursor);
-        }
-        catch(Exception e)
-
-        {
-            e.printStackTrace();
-        }
-        int numberOfRows = cursor.getCount();
-
-        if(numberOfRows <= 0)
-        {
-
-            Toast.makeText(getApplicationContext(), "User Name and Password miss match..\nPlease Try Again", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-            startActivity(intent);
-            return false;
-        }
-
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
-
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-    public void onDestroy()
-    {
-        super.onDestroy();
-        DB.close();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    private String capitalizeFirstCharacter(String textInput){
+        String input = textInput.toLowerCase();
+        String output = input.substring(0, 1).toUpperCase() + input.substring(1);
+        return output;
     }
 }
-
