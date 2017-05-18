@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
     protected EditText username;
     private EditText password;
     protected String enteredUsername;
-    private final String serverUrl = "Path to your server";
+    private final String serverUrl = "hodor.ait.gr:8080/myPets/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
