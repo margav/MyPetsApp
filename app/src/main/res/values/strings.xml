@@ -27,7 +27,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="registration_instruction">I do not have a username and password details. Click the button below to register</string>
     <string name="register_button">Register Now</string>
-    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_register">Registration</string>
     <string name="welcome">WELCOME</string>
     <string name="is_login">You have been successfully login </string>
     <string name="sign_up">Sign Up Now</string>
