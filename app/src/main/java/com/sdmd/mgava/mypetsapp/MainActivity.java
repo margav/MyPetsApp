@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
     protected EditText username;
     private EditText password;
     protected String enteredUsername;
-    private final String serverUrl = "hodor.ait.gr:8080/myPets/api";
+    private final String serverUrl = "hodor.ait.gr:8080/myPets/api/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +151,7 @@ public class MainActivity extends ActionBarActivity {
             }
         }
         private StringBuilder inputStreamToString(InputStream is) {
-            String rLine = "";
+            String rLine;
             StringBuilder answer = new StringBuilder();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             try {
@@ -167,7 +167,7 @@ public class MainActivity extends ActionBarActivity {
     }
     private int returnParsedJsonObject(String result){
 
-        JSONObject resultObject = null;
+        JSONObject resultObject;
         int returnedResult = 0;
         try {
             resultObject = new JSONObject(result);

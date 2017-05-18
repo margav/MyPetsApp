@@ -39,7 +39,7 @@ public class RegisterActivity extends ActionBarActivity {
     private EditText password;
     private EditText email;
     protected String enteredUsername;
-    private final String serverUrl = "Path to your server";
+    private final String serverUrl = "hodor.ait.gr:8080/myPets/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +82,7 @@ public class RegisterActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // automatically handle clicks on the Home/Up button
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -149,7 +148,7 @@ public class RegisterActivity extends ActionBarActivity {
             }
         }
         private StringBuilder inputStreamToString(InputStream is) {
-            String rLine = "";
+            String rLine;
             StringBuilder answer = new StringBuilder();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             try {
@@ -165,7 +164,7 @@ public class RegisterActivity extends ActionBarActivity {
     }
     private int returnParsedJsonObject(String result){
 
-        JSONObject resultObject = null;
+        JSONObject resultObject;
         int returnedResult = 0;
         try {
             resultObject = new JSONObject(result);
