@@ -11,7 +11,7 @@ public final class DBSchema {
     private DBSchema() {}
 
     public static abstract class PetInfoTable implements BaseColumns {
-        public static final String TABLE_NAME = "pets";
+        public static final String TABLE_NAME = "petInfos";
 
         public static final String NAME = "name";
         public static final String DATE_OF_BIRTH = "date_of_birth";

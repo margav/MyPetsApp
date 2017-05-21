@@ -5,7 +5,8 @@ import java.util.List;
 
 class PetInfoFactory {
 
-    private static List<PetInfo> listOfPetInfos = new ArrayList<>();
+    public static List<PetInfo> listOfPetInfos = new ArrayList<>();
+
 
     private PetInfoFactory() { }
 
