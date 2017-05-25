@@ -80,19 +80,19 @@
 	            android:layout_marginTop="10dp"
 	            android:layout_marginLeft="10dp"
 	            android:layout_marginRight="10dp"/>
-	        <Button 
-	            android:id="@+id/btnAdd"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:background="@drawable/button_style"
-	            android:textColor="@color/text"
-	            android:textStyle="bold"
-	            android:textSize="14sp"
-	            android:text="@string/add"
-	            android:padding="7dp"
-	            android:layout_marginTop="10dp"
-	            android:layout_marginLeft="10dp"
-	            android:layout_marginRight="10dp"/>
+	        <!--<Button-->
+	            <!--android:id="@+id/btnAdd"-->
+	            <!--android:layout_width="fill_parent"-->
+	            <!--android:layout_height="wrap_content"-->
+	            <!--android:background="@drawable/button_style"-->
+	            <!--android:textColor="@color/text"-->
+	            <!--android:textStyle="bold"-->
+	            <!--android:textSize="14sp"-->
+	            <!--android:text="@string/add"-->
+	            <!--android:padding="7dp"-->
+	            <!--android:layout_marginTop="10dp"-->
+	            <!--android:layout_marginLeft="10dp"-->
+	            <!--android:layout_marginRight="10dp"/>-->
 	            </LinearLayout>
     </ScrollView>
     <ProgressBar
@@ -101,13 +101,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerInParent="true" />
-    <TextView 
-			android:id="@+id/txtAlert"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/alert"
-			android:textColor="@color/text"
-			android:textSize="14sp"
-			android:layout_centerInParent="true"
-			android:visibility="gone"/>
+    <!--<TextView-->
+			<!--android:id="@+id/txtAlert"-->
+			<!--android:layout_width="wrap_content"-->
+			<!--android:layout_height="wrap_content"-->
+			<!--android:text="@string/alert"-->
+			<!--android:textColor="@color/text"-->
+			<!--android:textSize="14sp"-->
+			<!--android:layout_centerInParent="true"-->
+			<!--android:visibility="gone"/>-->
 </RelativeLayout>
