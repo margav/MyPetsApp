@@ -47,7 +47,7 @@ public class FragChoice extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!status) {
-                    Toast.makeText(getActivity(), "Details are only available to registered users.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "PetDetails are only available to registered users.", Toast.LENGTH_SHORT).show();
                 }
 
             }
