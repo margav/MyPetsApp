@@ -1,5 +1,11 @@
 package com.sdmd.mgava.mypetsapp;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.ImageView;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,12 +18,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Stack;
 import java.util.WeakHashMap;
-
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.widget.ImageView;
 
 public class ImageLoader {
 

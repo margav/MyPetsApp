@@ -1,9 +1,9 @@
 package com.sdmd.mgava.mypetsapp;
 
+import android.graphics.Bitmap;
+
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
-
-import android.graphics.Bitmap;
 
 public class MemoryCache {
     private HashMap<String, SoftReference<Bitmap>> cache=new HashMap<String, SoftReference<Bitmap>>();

@@ -66,7 +66,7 @@ public class CategoryList extends Activity {
         cla = new CategoryListAdapter(CategoryList.this);
 
         // category API url
-        CategoryAPI = Utils.serverUrl+"?accesskey=";
+        CategoryAPI = Utils.serverUrl;
 
         // call asynctask class to request data from server
         new getDataTask().execute();

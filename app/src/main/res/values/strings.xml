@@ -49,5 +49,9 @@
     <string name="welcome">WELCOME</string>
     <string name="is_login">You have been successfully login </string>
     <string name="sign_up">Sign Up Now</string>
+    <string name="db_exist_alert" />
 
+    <item name="txtAlert" type="id" />
+    <item name="list_view" type="id" />
+    <item name="btnAdd" type="id" />
 </resources>
