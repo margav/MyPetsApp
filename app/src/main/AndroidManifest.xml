@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 
        <application
@@ -18,29 +21,47 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="com.sdmd.mgava.mypetsapp.MainActivity" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CategoryList"
-            android:screenOrientation="portrait"/>
+           <activity android:name=".PetInfoDetails">
+        <intent-filter>
+            <action android:name="com.sdmd.mgava.mypetsapp.BrowseActivity" />
 
-        <activity
-            android:name=".PetList"
-            android:screenOrientation="portrait"/>
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+    </activity>
+    <activity android:name=".BrowseActivity">
+    </activity>
+    <activity android:name=".RegisterActivity">
+    </activity>
+    <activity android:name=".LoginActivity">
+    </activity>
 
-        <activity
-            android:name=".PetDetails"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
-        <activity
-            android:name=".RegisterActivity"
-            android:label="@string/title_activity_register" >
-        </activity>
+    <service android:name=".UserService"
+        android:enabled="true"
+        android:exported="false" />
+</application>
+           <!--<activity-->
+            <!--android:name=".CategoryList"-->
+            <!--android:screenOrientation="portrait"/>-->
+
+        <!--<activity-->
+            <!--android:name=".PetList"-->
+            <!--android:screenOrientation="portrait"/>-->
+
+        <!--<activity-->
+            <!--android:name=".PetInfoDetails"-->
+            <!--android:screenOrientation="portrait"/>-->
+        <!--<activity-->
+            <!--android:name=".LoginActivity"-->
+            <!--android:label="@string/title_activity_login" >-->
+        <!--</activity>-->
+        <!--<activity-->
+            <!--android:name=".RegisterActivity"-->
+            <!--android:label="@string/title_activity_register" >-->
+        <!--</activity>-->
         <!--<activity android:name=".LogInActivity"-->
             <!--android:label="Log In" />-->
      <!--<activity android:name=".RegistrationActivity"-->
@@ -48,7 +69,4 @@
         <!--<activity android:name=".BrowseActivity"-->
             <!--android:label="Details"/>-->
 
-
-    </application>
-
-</manifest>
+  </manifest>

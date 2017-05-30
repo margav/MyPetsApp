@@ -3,248 +3,200 @@ package com.sdmd.mgava.mypetsapp;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
-public class DBHelper extends SQLiteOpenHelper{
-
-    String DB_PATH;
-    private final static String DB_NAME = "db_petInfo";
-    public final static int DB_VERSION = 1;
-    public static SQLiteDatabase db;
-
-    private final Context context;
-
-    private final String TABLE_NAME = "tbl_petInfo";
-    private final String ID = "id";
-    private final String PET_NAME = "Pet_name";
+import static com.sdmd.mgava.mypetsapp.DbSchema.PetInfoTable.TABLE_NAME;
 
 
 
-    public DBHelper(Context context) {
+public class DbHelper extends SQLiteOpenHelper {
 
-        super(context, DB_NAME, null, DB_VERSION);
-        this.context = context;
+    private static final String[] PROJECTION = {
+            DbSchema.PetInfoTable._ID,
+            DbSchema.PetInfoTable.COLUMN_NAME_NAME,
+            DbSchema.PetInfoTable.COLUMN_NAME_DATE_OF_BIRTH,
+            DbSchema.PetInfoTable.COLUMN_NAME_GENDER,
+            DbSchema.PetInfoTable.COLUMN_NAME_BREED,
+            DbSchema.PetInfoTable.COLUMN_NAME_COLOUR,
+            DbSchema.PetInfoTable.COLUMN_NAME_DISTINGUISHING_MARKS,
+            DbSchema.PetInfoTable.COLUMN_NAME_CHIP_ID,
+            DbSchema.PetInfoTable.COLUMN_NAME_SPECIES,
+            DbSchema.PetInfoTable.COLUMN_NAME_COMMENTS,
+            DbSchema.PetInfoTable.COLUMN_NAME_IMAGE_URI,
 
-        DB_PATH = Utils.DBPath;
-    }
+            DbSchema.PetInfoTable.COLUMN_NAME_OWNER_NAME,
+            DbSchema.PetInfoTable.COLUMN_NAME_OWNER_ADDRESS,
+            DbSchema.PetInfoTable.COLUMN_NAME_OWNER_PHONE,
 
-    public void createDataBase() throws IOException{
+            DbSchema.PetInfoTable.COLUMN_NAME_VET_NAME,
+            DbSchema.PetInfoTable.COLUMN_NAME_VET_ADDRESS,
+            DbSchema.PetInfoTable.COLUMN_NAME_VET_PHONE,
+    };
 
-        boolean dbExist = checkDataBase();
-        SQLiteDatabase db_Read = null;
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "PetInfo.db";
 
+    private static final String TEXT_TYPE = " TEXT";
+    private static final String INT_TYPE = " INTEGER";
+    private static final String COMMA_SEP = ",";
 
-        if(dbExist){
-            //do nothing - database already exist
-
-        }else{
-            db_Read = this.getReadableDatabase();
-            db_Read.close();
-
-            try {
-                copyDataBase();
-            } catch (IOException e) {
-                throw new Error("Error copying database");
-            }
-        }
-
-    }
+    private static final String SORT_ORDER = DbSchema.PetInfoTable.COLUMN_NAME_NAME + " ASC";
 
 
-
-    private boolean checkDataBase(){
-
-        File dbFile = new File(DB_PATH + DB_NAME);
-
-        return dbFile.exists();
+    public DbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }
 
-
-    private void copyDataBase() throws IOException{
-
-        InputStream myInput = context.getAssets().open(DB_NAME);
-
-        String outFileName = DB_PATH + DB_NAME;
-
-        OutputStream myOutput = new FileOutputStream(outFileName);
-
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = myInput.read(buffer))>0){
-            myOutput.write(buffer, 0, length);
-        }
-
-        myOutput.flush();
-        myOutput.close();
-        myInput.close();
-
-    }
-
-    public void openDataBase() throws SQLException{
-        String myPath = DB_PATH + DB_NAME;
-        db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-    }
-
-    @Override
-    public void close() {
-        db.close();
-    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_NAME + " (_ID " + INT_TYPE + " PRIMARY KEY AUTOINCREMENT," +
+                DbSchema.PetInfoTable.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_DATE_OF_BIRTH + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_GENDER + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_BREED + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_COLOUR + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_DISTINGUISHING_MARKS + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_CHIP_ID + INT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_OWNER_NAME + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_OWNER_ADDRESS + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_OWNER_PHONE + INT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_VET_NAME + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_VET_ADDRESS + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_VET_PHONE + INT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_COMMENTS + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_SPECIES + TEXT_TYPE + COMMA_SEP +
+                DbSchema.PetInfoTable.COLUMN_NAME_IMAGE_URI + INT_TYPE +")");
 
     }
 
-    @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // This database is only a cache for online data, so its upgrade
+        // policy is to simply discard the data and start over
+        db.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME);
+        onCreate(db);
 
     }
 
-    /** this code is used to get all data from database */
-    public ArrayList<ArrayList<Object>> getAllData(){
-        ArrayList<ArrayList<Object>> dataArrays = new ArrayList<ArrayList<Object>>();
-
-        Cursor cursor = null;
-
-        try{
-            cursor = db.query(
-                    TABLE_NAME,
-                    new String[]{ID, PET_NAME},
-                    null,null, null, null, null);
-            cursor.moveToFirst();
-
-            if (!cursor.isAfterLast()){
-                do{
-                    ArrayList<Object> dataList = new ArrayList<Object>();
-
-                    dataList.add(cursor.getLong(0));
-                    dataList.add(cursor.getString(1));
-                    dataList.add(cursor.getString(2));
-                    dataList.add(cursor.getString(3));
-
-                    dataArrays.add(dataList);
-                }
-
-                while (cursor.moveToNext());
-            }
-            cursor.close();
-        }catch (SQLException e){
-            Log.e("DB Error", e.toString());
-            e.printStackTrace();
-        }
-
-        return dataArrays;
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
     }
 
-    /** this code is used to get all data from database */
-    public boolean isDataExist(long id){
-        boolean exist = false;
-
-        Cursor cursor = null;
-
-        try{
-            cursor = db.query(
-                    TABLE_NAME,
-                    new String[]{ID},
-                    ID +"="+id,
-                    null, null, null, null);
-            if(cursor.getCount() > 0){
-                exist = true;
-            }
-
-            cursor.close();
-        }catch (SQLException e){
-            Log.e("DB Error", e.toString());
-            e.printStackTrace();
-        }
-
-        return exist;
-    }
-
-    /** this code is used to get all data from database */
-    public boolean isPreviousDataExist(){
-        boolean exist = false;
-
-        Cursor cursor = null;
-
-        try{
-            cursor = db.query(
-                    TABLE_NAME,
-                    new String[]{ID},
-                    null,null, null, null, null);
-            if(cursor.getCount() > 0){
-                exist = true;
-            }
-
-            cursor.close();
-        }catch (SQLException e){
-            Log.e("DB Error", e.toString());
-            e.printStackTrace();
-        }
-
-        return exist;
-    }
-
-    public void addData(long id, String pet_name){
-        // this is a key value pair holder used by android's SQLite functions
+    private ContentValues getContentValues(PetInfo p1) {
         ContentValues values = new ContentValues();
-        values.put(ID, id);
-        values.put(PET_NAME, pet_name);
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_NAME, p1.getName());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_DATE_OF_BIRTH, p1.getDateOfBirth());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_GENDER, p1.getGender());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_BREED, p1.getBreed());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_COLOUR, p1.getColour());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_DISTINGUISHING_MARKS, p1.getDistinguishingMarks());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_CHIP_ID, p1.getChipID());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_OWNER_NAME, p1.getOwnerName());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_OWNER_ADDRESS, p1.getOwnerAddress());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_OWNER_PHONE, p1.getOwnerPhone());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_VET_NAME, p1.getVetName());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_VET_ADDRESS, p1.getVetAddress());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_VET_PHONE, p1.getVetPhone());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_COMMENTS, p1.getComments());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_SPECIES, p1.getSpecies());
+        values.put(DbSchema.PetInfoTable.COLUMN_NAME_IMAGE_URI, p1.getImageUri());
+        return values;
+    }
+
+    private void insertPet(PetInfo p) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = getContentValues(p);
+        db.insert(TABLE_NAME, null, values);
+    }
+
+     public List<PetInfo> getPets() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                TABLE_NAME,           // The table to query
+                PROJECTION,                                     // The columns to return
+                null,                                    // The columns for the WHERE clause
+                null,                                      // The values for the WHERE clause
+                null,                                           // don't group the rows
+                null,                                           // don't filter by row groups
+                SORT_ORDER                                      // The sort order
+        );
+
+        List<PetInfo> petInfos = new ArrayList<>();
+
+        int nameColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_NAME);
+        int dateOfBirthColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_DATE_OF_BIRTH);
+        int genderColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_GENDER);
+        int breedColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_BREED);
+        int colorColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_COLOUR);
+        int distinguishingMarksColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_DISTINGUISHING_MARKS);
+        int chipIDColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_CHIP_ID);
+        int speciesColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_SPECIES);
+        int commentsColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_COMMENTS);
+        int imageUriColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_IMAGE_URI);
+        int ownerNameColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_OWNER_NAME);
+        int ownerAddressColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_OWNER_ADDRESS);
+        int ownerPhoneNumberColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_OWNER_PHONE);
+        int vetNameColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_VET_NAME);
+        int vetAddressColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_VET_ADDRESS);
+        int vetPhoneNumberColumn = cursor.getColumnIndexOrThrow(DbSchema.PetInfoTable.COLUMN_NAME_VET_PHONE);
+
+        while (cursor.moveToNext()) {
+            PetInfo petInfo = new PetInfo(cursor.getString(nameColumn),
+                    cursor.getString(dateOfBirthColumn),
+                    cursor.getString(genderColumn),
+                    cursor.getString(breedColumn),
+                    cursor.getString(colorColumn),
+                    cursor.getString(distinguishingMarksColumn),
+                    cursor.getString(chipIDColumn),
+                    cursor.getString(ownerNameColumn),
+                    cursor.getString(ownerAddressColumn),
+                    cursor.getString(ownerPhoneNumberColumn),
+                    cursor.getString(vetNameColumn),
+                    cursor.getString(vetAddressColumn),
+                    cursor.getString(vetPhoneNumberColumn),
+                    cursor.getString(commentsColumn),
+                    cursor.getString(speciesColumn),
+                    cursor.getInt(imageUriColumn));
+
+            petInfos.add(petInfo);
+        }
+
+        cursor.close();
+
+        return petInfos;
+    }
 
 
-        // ask the database object to insert the new data
-        try{db.insert(TABLE_NAME, null, values);}
-        catch(Exception e)
-        {
-            Log.e("DB ERROR", e.toString());
-            e.printStackTrace();
+    public int countPets() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String countQuery = "SELECT count(*) FROM " + DbSchema.PetInfoTable.TABLE_NAME;
+        Cursor mcursor = db.rawQuery(countQuery, null);
+        mcursor.moveToFirst();
+        return mcursor.getInt(0);
+    }
+
+    public void initDb() {
+        if (countPets() == 0) {
+            for (PetInfo petInfo : getPetList()) {
+                insertPet(petInfo);
+            }
         }
     }
 
-    public void deleteData(long id){
-        // ask the database manager to delete the row of given id
-        try {db.delete(TABLE_NAME, ID + "=" + id, null);}
-        catch (Exception e)
-        {
-            Log.e("DB ERROR", e.toString());
-            e.printStackTrace();
-        }
+    private List<PetInfo> getPetList() {
+        List<PetInfo> petInfos = new ArrayList<>();
+        petInfos.add(new PetInfo("Jack", "2015", "female", "Shepferd", "1553", "Black", "none", "Harvey Specter", "33 Maine", "100876554", "Rita Rose", "Park ave 42", "190999878","good","Dog", R.drawable.dog1));
+        petInfos.add(new PetInfo("Bizou", "2014", "male", "Siam", "1245", "Brown", "none", "Mike Ross", "5 ave", "123456778", "Josh Macalley", "3 ave ", "1898799897", "good", "Cat", R.drawable.cat));
+        petInfos.add(new PetInfo("Saimon", "2014", "male", "Inguana", "Green", "1445", "none", "John Appleseed", "Palo alto 4", "16566768", "Meghan Ross", "Maine 32", "189980090", "well", "Other", R.drawable.lizard));
+        return petInfos;
     }
-
-    public void deleteAllData(){
-        // ask the database manager to delete the row of given id
-        try {db.delete(TABLE_NAME, null, null);}
-        catch (Exception e)
-        {
-            Log.e("DB ERROR", e.toString());
-            e.printStackTrace();
-        }
-    }
-
-    public void updateData(long id){
-        // this is a key value pair holder used by android's SQLite functions
-        ContentValues values = new ContentValues();
-
-
-        // ask the database object to update the database row of given rowID
-        try {db.update(TABLE_NAME, values, ID + "=" + id, null);}
-        catch (Exception e)
-        {
-            Log.e("DB Error", e.toString());
-            e.printStackTrace();
-        }
-    }
-
-
 }
+
+
+

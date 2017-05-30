@@ -1,177 +1,145 @@
 package com.sdmd.mgava.mypetsapp;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+public class RegisterActivity extends AppCompatActivity {
 
 
-public class RegisterActivity extends ActionBarActivity {
+    private BroadcastReceiver getAllStudentsResultBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String studentResults = intent.getStringExtra(UserService.EXTRA_USERS_RESULT);
 
-    protected EditText username;
-    private EditText password;
-    private EditText email;
-    protected String enteredUsername;
-    private final String serverUrl = "hodor.ait.gr:8080/myPets/api";
+            User[] users = new Gson().fromJson(studentResults, User[].class);
+
+            String result = "";
+
+            for (int i = 0; i < users.length; i++) {
+                User user = users[i];
+                result += user.getFirstName() + "\t" + user.getLastName() + "\t"  + "\n";
+            }
+        }
+    };
+
+    private BroadcastReceiver createStudentResultBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String resultMsg = intent.getStringExtra(UserService.EXTRA_CREATE_USER_RESULT);
+
+            Toast.makeText(RegisterActivity.this, resultMsg, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        username = (EditText)findViewById(R.id.username_field);
-        password = (EditText)findViewById(R.id.password_field);
-        email = (EditText)findViewById(R.id.email_field);
-        Button signUpButton = (Button)findViewById(R.id.sign_up);
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        final EditText registerUsername = (EditText) findViewById(R.id.idRegUsername);
+        final EditText registerPassword = (EditText) findViewById(R.id.idRegPassword);
+        final EditText confirmPassWord = (EditText) findViewById(R.id.idRegConfirmPassword);
+        final EditText Name = (EditText) findViewById(R.id.idName);
+        final EditText surname = (EditText) findViewById(R.id.idSurname);
+
+
+
+        Button btnRegister = (Button)findViewById(R.id.idRegButton);
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enteredUsername = username.getText().toString();
-                String enteredPassword = password.getText().toString();
-                String enteredEmail = email.getText().toString();
+                final String username= registerUsername.getText().toString();
+                final String password = registerPassword.getText().toString();
+                final String confirmPassword= confirmPassWord.getText().toString();
+                final String firstName = Name.getText().toString();
+                final String lastName= surname.getText().toString();
 
-                if(enteredUsername.equals("") || enteredPassword.equals("") || enteredEmail.equals("")){
-                    Toast.makeText(RegisterActivity.this, "Username or password or email must be filled", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if(enteredUsername.length() <= 1 || enteredPassword.length() <= 1){
-                    Toast.makeText(RegisterActivity.this, "Username or password length must be greater than one", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                // request authentication with remote server4
-                AsyncDataClass asyncRequestObject = new AsyncDataClass();
-                asyncRequestObject.execute(serverUrl, enteredUsername, enteredPassword, enteredEmail);
+                if(firstName.isEmpty() && password.isEmpty() && lastName.isEmpty() && username.isEmpty()){
+                    Toast toast = Toast.makeText(RegisterActivity.this, "fill all fields", Toast.LENGTH_SHORT);
+                    toast.show();
+                }else if( !password.equals(confirmPassword)){
+                    Toast toast = Toast.makeText(RegisterActivity.this, "password does not match confirmation password", Toast.LENGTH_SHORT);
+                    toast.show();
+                          }else if(password.length()<6){
+                    Toast toast = Toast.makeText(RegisterActivity.this, "password must be at least 6 characters", Toast.LENGTH_SHORT);
+                    toast.show();
+                          } else {
+                              insertStudent(firstName, lastName, username, password);
+                              SharedPreferences preferences = getSharedPreferences("MYPREFS", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("newUsername", username);
+                            editor.apply();
+
+
+                            Intent loginScreen = new Intent(RegisterActivity.this, MainActivity.class);
+                            startActivity(loginScreen);
+                        }
+
+
             }
         });
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_register, menu);
-        return true;
-    }
+
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button
-        int id = item.getItemId();
+    protected void onResume() {
+        super.onResume();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
 
-        return super.onOptionsItemSelected(item);
+        IntentFilter getStudentsResultIntentFilter = new IntentFilter(UserService.ACTION_GET_USERS_RESULT);
+        broadcastManager.registerReceiver(getAllStudentsResultBroadcastReceiver, getStudentsResultIntentFilter);
+
+        IntentFilter createStudentResultIntentFilter = new IntentFilter(UserService.ACTION_CREATE_USER_RESULT);
+        broadcastManager.registerReceiver(createStudentResultBroadcastReceiver, createStudentResultIntentFilter);
     }
-    private class AsyncDataClass extends AsyncTask<String, Void, String> {
 
-        @Override
-        protected String doInBackground(String... params) {
+    @Override
+    protected void onPause() {
+        super.onPause();
 
-            HttpParams httpParameters = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
-            HttpConnectionParams.setSoTimeout(httpParameters, 5000);
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
 
-            HttpClient httpClient = new DefaultHttpClient(httpParameters);
-            HttpPost httpPost = new HttpPost(params[0]);
-
-            String jsonResult = "";
-            try {
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-                nameValuePairs.add(new BasicNameValuePair("username", params[1]));
-                nameValuePairs.add(new BasicNameValuePair("password", params[2]));
-                nameValuePairs.add(new BasicNameValuePair("email", params[3]));
-                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                HttpResponse response = httpClient.execute(httpPost);
-                jsonResult = inputStreamToString(response.getEntity().getContent()).toString();
-                System.out.println("Returned Json object " + jsonResult.toString());
-
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return jsonResult;
-        }
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            System.out.println("Resulted Value: " + result);
-            if(result.equals("") || result == null){
-                Toast.makeText(RegisterActivity.this, "Server connection failed", Toast.LENGTH_LONG).show();
-                return;
-            }
-            int jsonResult = returnParsedJsonObject(result);
-            if(jsonResult == 0){
-                Toast.makeText(RegisterActivity.this, "Invalid username or password or email", Toast.LENGTH_LONG).show();
-                return;
-            }
-            if(jsonResult == 1){
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                intent.putExtra("USERNAME", enteredUsername);
-                intent.putExtra("MESSAGE", "You have been successfully Registered");
-                startActivity(intent);
-            }
-        }
-        private StringBuilder inputStreamToString(InputStream is) {
-            String rLine;
-            StringBuilder answer = new StringBuilder();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            try {
-                while ((rLine = br.readLine()) != null) {
-                    answer.append(rLine);
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return answer;
-        }
+        broadcastManager.unregisterReceiver(getAllStudentsResultBroadcastReceiver);
+        broadcastManager.unregisterReceiver(createStudentResultBroadcastReceiver);
     }
-    private int returnParsedJsonObject(String result){
+    private void insertStudent(String firstName, String lastName, String username, String password) {
+        Intent intent = new Intent(this, UserService.class);
+        intent.setAction(UserService.ACTION_CREATE_USER);
 
-        JSONObject resultObject;
-        int returnedResult = 0;
-        try {
-            resultObject = new JSONObject(result);
-            returnedResult = resultObject.getInt("success");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return returnedResult;
+        intent.putExtra(UserService.EXTRA_FIRST_NAME, firstName);
+        intent.putExtra(UserService.EXTRA_LAST_NAME, lastName);
+        intent.putExtra(UserService.EXTRA_USERNAME, username);
+        intent.putExtra(UserService.EXTRA_PASSWORD, password);
+
+        startService(intent);
     }
+
+    private void getAllStudents() {
+        Intent intent = new Intent(this, UserService.class);
+        intent.setAction(UserService.ACTION_GET_USERS);
+
+        startService(intent);
+    }
+
+
+
 }

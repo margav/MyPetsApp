@@ -1,104 +1,149 @@
 package com.sdmd.mgava.mypetsapp;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.List;
+
+import static com.sdmd.mgava.mypetsapp.R.id.PetDetailsId;
 
 public class BrowseActivity extends AppCompatActivity {
 
-    public static final String EXTRA_PET_CATEGORY = "petInfo.category";
-    public static final String EXTRA_FOR_STATUS = "status";
+    DbHelper myDb;
+
+    int i;
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browse);
-        int category = getIntent().getIntExtra(EXTRA_PET_CATEGORY, -1);
-        boolean status = getIntent().getBooleanExtra(EXTRA_FOR_STATUS, false);
-        FragChoice fragment = new FragChoice();
-        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-        Bundle args = new Bundle();
-        args.putInt(FragChoice.EXTRA_PET_CATEGORY2, category);
-        args.putBoolean(FragChoice.EXTRA_FOR_STATUS2, status);
-        fragment.setArguments(args);
-        trans.replace(R.id.fragment_container, fragment);
-        trans.commit();
+        setContentView(R.layout.activity_petinfo_details);
+
+        myDb = new DbHelper(this);
+
+
+        final String petIntent = getIntent().getExtras().getString("Species");
+
+        final List<PetInfo> petInfo = myDb.getPets();
+
+
+        ListView listview = (ListView) findViewById(PetDetailsId);
+        PetInfoAdapter petInfoAdapter = new PetInfoAdapter(getApplicationContext(), R.layout.activity_petinfo_details);
+        listview.setAdapter(petInfoAdapter);
+
+        for (i = 0; i < petInfo.size(); i++)
+
+        {
+
+            System.out.println(petInfo.get(i).getSpecies()+"   "+petIntent);
+            if (petInfo.get(i).getSpecies().equals(petIntent)) {
+
+                DataProvider dataProvider = new DataProvider(
+                        petInfo.get(i).getImageUri(), petInfo.get(i).getName(), petInfo.get(i).getBreed());
+                petInfoAdapter.add(dataProvider);
+
+            }
+        }
+
+
+        final ListView listView = (ListView) findViewById(PetDetailsId);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                SharedPreferences preferences = getSharedPreferences("MYPREFS", MODE_PRIVATE);
+
+                String userDetailsName = preferences.getString("newUsername", "");
+                System.out.println("auto einai2"+" "+ userDetailsName);
+                if(!userDetailsName.isEmpty()) {
+
+
+                         Intent intent = new Intent(BrowseActivity.this, PetInfoDetails.class);
+
+
+                         String result = (String) listView.getItemAtPosition(position).toString();
+                         intent.putExtra("Id", result);
+
+                         startActivity(intent);
+                  }else{
+
+                Toast toast = Toast.makeText(BrowseActivity.this, "please register first", Toast.LENGTH_SHORT);
+                toast.show();
+
+            }
+
+                     }
+
+
+        });
+
+
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem logout = menu.findItem(R.id.idLogout);
+        MenuItem login = menu.findItem(R.id.idLogin);
+        SharedPreferences preferences = getSharedPreferences("MYPREFS", MODE_PRIVATE);
+        String userDetailsName = preferences.getString("newUsername", "");
+        System.out.println(userDetailsName);
+        if(userDetailsName.isEmpty()) {
+            login.setVisible(true);
+            logout.setVisible(false);
+
+        }else{
+            login.setVisible(false);
+            logout.setVisible(true);
+
+        }
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.idLogin:
+                Intent LoginScreen = new Intent(BrowseActivity.this,LoginActivity.class);
+                startActivity(LoginScreen);
+
+
+                return true;
+
+            case R.id.idLogout:
+                SharedPreferences preferences = getSharedPreferences("MYPREFS", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.commit();
+                Intent LognScreen = new Intent(BrowseActivity.this,MainActivity.class);
+                startActivity(LognScreen);
+                return true;
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }
-//import android.database.Cursor;
-//import android.database.sqlite.SQLiteDatabase;
-//import android.os.Bundle;
-//import android.support.v7.app.AppCompatActivity;
-//import android.widget.TextView;
-//
-//public class BrowseActivity extends AppCompatActivity {
-//
-//    private DBSchemaHelper helper;
-//
-//    private static final String[] PROJECTIONS = {DBSchema.PetInfoTable.NAME, DBSchema.PetInfoTable.DATE_OF_BIRTH,    DBSchema.PetInfoTable.GENDER,
-//            DBSchema.PetInfoTable.BREED,
-//            DBSchema.PetInfoTable.COLOUR,
-//            DBSchema.PetInfoTable.DISTINGUISHING_MARKS,
-//            DBSchema.PetInfoTable.CHIP_ID,
-//            DBSchema.PetInfoTable.OWNER_NAME,
-//            DBSchema.PetInfoTable.OWNER_ADDRESS,
-//            DBSchema.PetInfoTable.OWNER_PHONE,
-//            DBSchema.PetInfoTable.VET_NAME,
-//            DBSchema.PetInfoTable.VET_ADDRESS,
-//            DBSchema.PetInfoTable.VET_PHONE,
-//            DBSchema.PetInfoTable.COMMENTS ,
-//            DBSchema.PetInfoTable.IMAGE_URI};
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_browse);
-//
-//        helper = new DBSchemaHelper(this);
-//
-//        getDesiredPets();
-//    }
-//
-//    private void getDesiredPets() {
-//        SQLiteDatabase database = helper.getReadableDatabase();
-//
-//        Cursor cursor = database.query(DBSchema.PetInfoTable.TABLE_NAME, PROJECTIONS, null, null, null, null, null);
-//        String results = "";
-//
-//        while (cursor.moveToNext()) {
-//
-//            String NAME = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.NAME));
-//            String DATE_OF_BIRTH = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.DATE_OF_BIRTH));
-//            String GENDER = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.GENDER));
-//            String BREED = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.BREED));
-//            String COLOUR = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.COLOUR));
-//            String DISTINGUISHING_MARKS = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.DISTINGUISHING_MARKS));
-//            int CHIP_ID = cursor.getInt(cursor.getColumnIndex(DBSchema.PetInfoTable.CHIP_ID));
-//            String OWNER_NAME = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.OWNER_NAME));
-//            String OWNER_ADDRESS = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.OWNER_ADDRESS));
-//            String OWNER_PHONE = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.OWNER_PHONE));
-//            String VET_NAME = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.VET_NAME));
-//            String VET_ADDRESS = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.VET_ADDRESS));
-//            String VET_PHONE = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.VET_PHONE));
-//            String COMMENTS = cursor.getString(cursor.getColumnIndex(DBSchema.PetInfoTable.COMMENTS));
-//            int IMAGE_URI = cursor.getInt(cursor.getColumnIndex(DBSchema.PetInfoTable.IMAGE_URI));
-//
-//
-//            results += IMAGE_URI + "\t" + NAME + "\t" + BREED + "\t" + DATE_OF_BIRTH + "\t" + GENDER + "\t" + COLOUR + "\t" + DISTINGUISHING_MARKS + "\t" + CHIP_ID + "\t" + OWNER_NAME + "\t" + OWNER_ADDRESS + "\t"
-//                    + OWNER_PHONE + "\t" + VET_NAME + "\t" + VET_ADDRESS + "\t" + VET_PHONE + "\t" + COMMENTS + "\n\n";
-//        }
-//
-//        TextView resultsTextView = (TextView) findViewById(R.id.view_for_database_results2);
-//        resultsTextView.setText(results);
-//
-//        cursor.close();
-//
-//    }
-//
-//    //onDestroy
-//    @Override
-//    protected void onDestroy() {
-//        helper.close();
-//        super.onDestroy();
-//    }
-//}
+ /*
+        PetInfo p1 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Dog", R.drawable.canis);
+        PetInfo p2 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "dog", R.drawable.british_short_hair);
+        PetInfo p3 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Other", R.drawable.canis);
+        PetInfo p4 = new PetInfo("jack", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Dog", R.drawable.colley);
+        PetInfo p5 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Cat", R.drawable.maine_coon);
+        PetInfo p6 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Other", R.drawable.canis);
+        PetInfo p7 = new PetInfo("nick", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Dog", R.drawable.lab);
+        PetInfo p8 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Cat", R.drawable.ragdoll);
+        PetInfo p9 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Other", R.drawable.canis);
+        PetInfo p10 = new PetInfo("rain", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Dog", R.drawable.husky);
+       */
