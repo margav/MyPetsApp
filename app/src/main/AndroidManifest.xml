@@ -21,52 +21,25 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="com.sdmd.mgava.mypetsapp.MainActivity" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-           <activity android:name=".PetInfoDetails">
-        <intent-filter>
-            <action android:name="com.sdmd.mgava.mypetsapp.BrowseActivity" />
+           <activity android:name=".BrowseActivity">
+                   </activity>
 
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-    </activity>
-    <activity android:name=".BrowseActivity">
-    </activity>
-    <activity android:name=".RegisterActivity">
-    </activity>
-    <activity android:name=".LoginActivity">
-    </activity>
+           <activity android:name=".PetInfoActivity">
 
-    <service android:name=".UserService"
-        android:enabled="true"
-        android:exported="false" />
-</application>
-           <!--<activity-->
-            <!--android:name=".CategoryList"-->
-            <!--android:screenOrientation="portrait"/>-->
+           </activity>
+           <activity android:name=".LoginActivity">
 
-        <!--<activity-->
-            <!--android:name=".PetList"-->
-            <!--android:screenOrientation="portrait"/>-->
+           </activity>
+           <activity android:name=".RegisterActivity">
 
-        <!--<activity-->
-            <!--android:name=".PetInfoDetails"-->
-            <!--android:screenOrientation="portrait"/>-->
-        <!--<activity-->
-            <!--android:name=".LoginActivity"-->
-            <!--android:label="@string/title_activity_login" >-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name=".RegisterActivity"-->
-            <!--android:label="@string/title_activity_register" >-->
-        <!--</activity>-->
-        <!--<activity android:name=".LogInActivity"-->
-            <!--android:label="Log In" />-->
-     <!--<activity android:name=".RegistrationActivity"-->
-            <!--android:label="Register"/>-->
-        <!--<activity android:name=".BrowseActivity"-->
-            <!--android:label="Details"/>-->
+           </activity>
+           <activity android:name=".PetInfoForm">
+
+           </activity>
+       </application>
+
 
   </manifest>

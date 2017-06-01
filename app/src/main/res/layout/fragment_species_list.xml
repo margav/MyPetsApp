@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <TextView
+        android:id="@+id/browserText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/browserText"
+        android:textAlignment="center"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="18dp"
+        tools:ignore="SpUsage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/dogsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_normal"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/logo"
+        android:padding="10dp"
+        android:radius="10dp"
+        android:text="@string/dogsText"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        tools:ignore="UnknownId"
+        android:layout_below="@+id/browserText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="19dp" />
+
+    <Button
+        android:id="@+id/catsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_normal"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/logo"
+        android:padding="10dp"
+        android:radius="10dp"
+        android:text="@string/catsText"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/dogsButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/otherButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_normal"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/logo"
+        android:padding="10dp"
+        android:radius="10dp"
+        android:text="@string/otherText"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/catsButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
+

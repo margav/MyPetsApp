@@ -8,7 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import com.sdmd.mgava.mypetsapp.model.UserInfo;
+import com.sdmd.mgava.mypetsapp.service.UserService;
+
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -16,61 +24,47 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
-        final EditText loginUsername = (EditText) findViewById(R.id.idNewUsername);
-        final EditText loginPassword = (EditText) findViewById(R.id.idPassword);
-
-        Button btnLogin = (Button) findViewById(R.id.idLoginButton1);
-        Button btnRegister = (Button) findViewById(R.id.idRegisterButton);
-
-
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-
-
-                                        @Override
-                                        public void onClick(View v) {
-                                            String username = loginUsername.getText().toString();
-
-                                            SharedPreferences preferences = getSharedPreferences("MY PREFERENCESS", MODE_PRIVATE);
-
-                                            String userDetailsName = preferences.getString("newUsername", "not exist");
-
-
-                                            if (username.equals(userDetailsName)) {
-
-
-                                                Intent displayScreen = new Intent(LoginActivity.this, MainActivity.class);
-                                                startActivity(displayScreen);
-                                            } else {
-                                                Context context = getApplicationContext();
-                                                CharSequence text = "Please Register First";
-                                                int duration = Toast.LENGTH_SHORT;
-
-                                                Toast toast = Toast.makeText(context, text, duration);
-                                                toast.show();
-
-
-                                            }
-                                        }
-                                    }
-        );
-
-
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-
-
-                                           @Override
-                                           public void onClick(View v) {
-                                               Intent RegisterScreen = new Intent(LoginActivity.this, RegisterActivity.class);
-                                               startActivity(RegisterScreen);
-                                           }
-                                       }
-
-
-        );
-
+        setListeners();
     }
 
+    /**
+     * Setup the various activity listeners
+     */
+    private void setListeners() {
+        Button loginButton = (Button) findViewById(R.id.loginButton);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                login();
+            }
+        });
 
+        TextView registerTextView = (TextView) findViewById(R.id.registerTextView);
+        registerTextView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void login() {
+        Intent intent = new Intent(this, UserService.class);
+       // intent.setAction(UserService.ACTION_GET_USERS);
+        intent.putExtra("username", ((EditText) findViewById(R.id.usernameText)).getText().toString());
+        intent.putExtra("password", ((EditText) findViewById(R.id.passwordText)).getText().toString());
+        startService(intent);
+    }
+
+    private void afterLogin(String userResult) {
+        if (!userResult.isEmpty()) {
+            UserInfo user = new Gson().fromJson(userResult, UserInfo.class);
+            SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("username", user.getUsername());
+            editor.apply();
+        } else {
+            Toast.makeText(this, "Username and password are not correct!", Toast.LENGTH_LONG).show();
+        }
+
+    }
 }

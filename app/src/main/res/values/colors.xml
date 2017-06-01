@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#455a64</color>
+    <color name="colorPrimaryDark">#37474F</color>
+    <color name="colorAccent">#AD1457</color>
+    <color name="colorPrimaryOpacity">#d41398d7</color>
     <color name="text">#ffffff</color>
     <color name="shadow">#505050</color>
     <color name="background">#2c1f1a</color>
@@ -11,8 +15,5 @@
     <color name="image_background">#999999</color>
     <color name="background_actionbar">#bb340e</color>
     <color name="detail_background">#372721</color>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
     <color name="silver">#C0C0C0</color>
 </resources>
