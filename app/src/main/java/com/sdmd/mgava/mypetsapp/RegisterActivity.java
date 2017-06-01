@@ -83,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
                     toast.show();
                           } else {
                               insertStudent(firstName, lastName, username, password);
-                              SharedPreferences preferences = getSharedPreferences("MYPREFS", MODE_PRIVATE);
+                              SharedPreferences preferences = getSharedPreferences("MY PREFERENCES", MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("newUsername", username);
                             editor.apply();

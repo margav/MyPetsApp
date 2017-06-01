@@ -39,11 +39,7 @@ public class UserService extends IntentService {
 
     private static final String URL_USERNAME = "username";
     private static final String URL_PASSWORD = "password";
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * //@param name Used to name the worker thread, important only for debugging.
-     */
+
     public UserService() {
         super("User Service");
     }
@@ -65,8 +61,8 @@ public class UserService extends IntentService {
         try {
             URL url = new URL(CREATE_USERS_URL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setReadTimeout(10000 );
+            conn.setConnectTimeout(15000 );
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
@@ -125,8 +121,8 @@ public class UserService extends IntentService {
         try {
             URL url = new URL(newURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setReadTimeout(10000 );
+            conn.setConnectTimeout(15000 );
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
 

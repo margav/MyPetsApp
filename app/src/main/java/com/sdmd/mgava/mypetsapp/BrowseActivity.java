@@ -60,7 +60,7 @@ public class BrowseActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-                SharedPreferences preferences = getSharedPreferences("MYPREFS", MODE_PRIVATE);
+                SharedPreferences preferences = getSharedPreferences("MY PREFERENCES", MODE_PRIVATE);
 
                 String userDetailsName = preferences.getString("newUsername", "");
                 System.out.println("auto einai2"+" "+ userDetailsName);
@@ -94,7 +94,7 @@ public class BrowseActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_main, menu);
         MenuItem logout = menu.findItem(R.id.idLogout);
         MenuItem login = menu.findItem(R.id.idLogin);
-        SharedPreferences preferences = getSharedPreferences("MYPREFS", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("MY PREFERENCES", MODE_PRIVATE);
         String userDetailsName = preferences.getString("newUsername", "");
         System.out.println(userDetailsName);
         if(userDetailsName.isEmpty()) {
@@ -120,7 +120,7 @@ public class BrowseActivity extends AppCompatActivity {
                 return true;
 
             case R.id.idLogout:
-                SharedPreferences preferences = getSharedPreferences("MYPREFS", MODE_PRIVATE);
+                SharedPreferences preferences = getSharedPreferences("MY PREFERENCES", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();
                 editor.commit();
@@ -135,15 +135,3 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
 }
- /*
-        PetInfo p1 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Dog", R.drawable.canis);
-        PetInfo p2 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "dog", R.drawable.british_short_hair);
-        PetInfo p3 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Other", R.drawable.canis);
-        PetInfo p4 = new PetInfo("jack", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Dog", R.drawable.colley);
-        PetInfo p5 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Cat", R.drawable.maine_coon);
-        PetInfo p6 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Other", R.drawable.canis);
-        PetInfo p7 = new PetInfo("nick", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Dog", R.drawable.lab);
-        PetInfo p8 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Cat", R.drawable.ragdoll);
-        PetInfo p9 = new PetInfo("kiko", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Other", R.drawable.canis);
-        PetInfo p10 = new PetInfo("rain", "1984", "male", "pitbul", "black", "none", "1238", "Alex", "nikaia", "23432", "kostas", "peiraias", "23423432", "all good", "Dog", R.drawable.husky);
-       */

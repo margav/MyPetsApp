@@ -30,10 +30,9 @@ public class LoginActivity extends AppCompatActivity {
 
                                         @Override
                                         public void onClick(View v) {
-
                                             String username = loginUsername.getText().toString();
 
-                                            SharedPreferences preferences = getSharedPreferences("MYPREFS", MODE_PRIVATE);
+                                            SharedPreferences preferences = getSharedPreferences("MY PREFERENCESS", MODE_PRIVATE);
 
                                             String userDetailsName = preferences.getString("newUsername", "not exist");
 
