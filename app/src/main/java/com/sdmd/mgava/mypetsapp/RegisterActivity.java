@@ -7,10 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-/**
- * Created by xrist on 9/5/2017.
- */
-
 public class RegisterActivity extends AppCompatActivity {
 
 

@@ -33,7 +33,5 @@
     <string name="lastNameText">Last name</string>
     <string name="loginText">Login</string>
     <string name="registerText">Have not an account register here! </string>
-    <item name="imageWrapperLand" type="id" />
-    <item name="infoWrapperLand" type="id" />
-    <item name="infoWrapper2Land" type="id" />
+
 </resources>
